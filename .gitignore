@@ -1,3 +1,5 @@
-.tfstate
-.tfsstate.backup
-.tfsvars
+.idea
+.terraform
+*.tfstate
+*.tfsstate.backup
+*.tfsvars
