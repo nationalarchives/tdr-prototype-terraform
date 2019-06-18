@@ -1,21 +1,21 @@
 resource "aws_sfn_state_machine" "sfn_state_machine" {
   name = var.step_function_name
-  role_arn = "${aws_iam_role.iam_for_sfn.arn}" //"aws:iam::247222723249:role/service-role/TestS3Role"
+  role_arn = "arn:aws:iam::247222723249:role/service-role/TestS3Role"
   definition = <<EOF
     {
-      Comment": "A Hello World example of the Amazon States Language using an AWS Lambda Function",
+      "Comment": "A Hello World example of the Amazon States Language using a Pass state",
       "StartAt": "HelloWorld",
       "States": {
         "HelloWorld": {
-          "Type": "Task",
-          "Resource": "${aws_lambda_function.lambda.arn}",
-          "End": true
+        "Type": "Pass",
+        "Result": "Hello World!",
+        "End": true
         }
       }
     }
     EOF
 
-  tag = {
+  tags = {
     Name = var.tag_name
   }
 }

@@ -21,3 +21,9 @@ module "vpc" {
   cidr     = "10.0.0.0/17"
   tag_name = "${terraform.workspace}-${var.tag_prefix}"
 }
+
+module "stepfunction" {
+  source             = "./modules/stepfunction"
+  step_function_name = "${terraform.workspace}-${var.tag_prefix}"
+  tag_name           = "${terraform.workspace}-${var.tag_prefix}"
+}
