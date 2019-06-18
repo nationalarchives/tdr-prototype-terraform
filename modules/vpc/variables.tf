@@ -1,6 +1,6 @@
 variable "vpc_name" {
   description = "Name to be used on all resources as identifier"
-  default = ""
+  default     = ""
 }
 
 variable "cidr" {
@@ -16,5 +16,5 @@ variable "instance_tenancy" {
 
 variable "tag_name" {
   description = "Tag name for resource"
-  type = string
+  type        = string
 }
