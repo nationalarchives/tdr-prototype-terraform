@@ -37,10 +37,12 @@
 
 <p>Run the following command: $ terraform init (this will initialize Terraform on your local machine)</p>
 
-<p>Run the following command: $ terraform apply </p>
+<p>Run the following command: $ terraform apply -var="access_key=[your aws access key]" -var="secret_key=[your aws secret key]" -var="region=[aws region]"</p>
+
+<p>Instead of entering the vars on the command line you can create a local variable file (terraform.tfvars at the top level of the project) and use this. NOTE do not commit this file as you will be exposing your AWS credentials.</p>
 
 <h2>Further Information</h2>
 
-<p>Terraform webiste: https://www.terraform.io/</p>
+<p>Terraform website: https://www.terraform.io/</p>
 
 <p>Terraform basic tutorial: https://learn.hashicorp.com/terraform/getting-started/build</p>
