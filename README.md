@@ -39,7 +39,11 @@
 
 <p>Run the following command: $ terraform apply -var="access_key=[your aws access key]" -var="secret_key=[your aws secret key]" -var="region=[aws region]"</p>
 
-<p>Instead of entering the vars on the command line you can create a local variable file (terraform.tfvars at the top level of the project) and use this. NOTE do not commit this file as you will be exposing your AWS credentials.</p>
+<p>Instead of entering the vars on the command line you can create a local variable file (terraform.tfvars) at the top level of the project) and use this. NOTE do not commit this file as you will be exposing your AWS credentials.</p>
+
+<p>Once the Terraform apply command successfully executes you can check you AWS account and see the resources created</p>
+
+<p><b>NOTE: PLEASE DELETE THE RESOURCES CREATED AFTER YOU HAVE FINISHED</b></p>
 
 <h2>Further Information</h2>
 
