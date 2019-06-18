@@ -9,6 +9,12 @@ locals {
   environment = "${lookup(var.workspace_to_environment_map, terraform.workspace, "dev")}"
 }
 
+module "cognito_admin" {
+  source            = "./modules/cognito"
+  cognito_user_pool = "${terraform.workspace}-${var.tag_prefix}-admin"
+  tag_name          = "${terraform.workspace}-${var.tag_prefix}-admin"
+}
+
 module "cognito" {
   source            = "./modules/cognito"
   cognito_user_pool = "${terraform.workspace}-${var.tag_prefix}"
