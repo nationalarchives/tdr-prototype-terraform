@@ -32,4 +32,5 @@ module "stepfunction" {
   source             = "./modules/stepfunction"
   step_function_name = "${terraform.workspace}-${var.tag_prefix}"
   tag_name           = "${terraform.workspace}-${var.tag_prefix}"
+  vpc_id             = "${module.vpc.vpc_id}"
 }

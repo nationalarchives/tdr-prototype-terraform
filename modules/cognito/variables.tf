@@ -1,6 +1,6 @@
 variable "tag_name" {
   description = "Tag name for resource"
-  type = string
+  type        = string
 }
 
 variable "cognito_user_pool" {
