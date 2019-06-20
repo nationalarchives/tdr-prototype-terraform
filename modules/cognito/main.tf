@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool" "pool" {
-  name = "${var.cognito_user_pool}"
+  name = var.cognito_user_pool
 
   admin_create_user_config {
     allow_admin_create_user_only = true
@@ -14,32 +14,32 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   tags = {
-    Name        = "${var.tag_name}"
+    Name        = var.tag_name
     Service     = "tdr_authentication"
-    Environment = "${var.environment}"
+    Environment = var.environment
     Owner       = "TDR"
-    CreatedBy   = "${var.tag_created_by}"
+    CreatedBy   = var.tag_created_by
     Terraform   = true
   }
 }
 
 resource "aws_cognito_user_pool_client" "TransferDigitalRecordsApp" {
   name                   = "TransferDigitalRecordsApp"
-  user_pool_id           = "${aws_cognito_user_pool.pool.id}"
+  user_pool_id           = aws_cognito_user_pool.pool.id
   refresh_token_validity = "30"
   generate_secret        = false
 }
 
 resource "aws_cognito_user_pool_client" "FileValidationApp" {
   name                   = "FileValidationApp"
-  user_pool_id           = "${aws_cognito_user_pool.pool.id}"
+  user_pool_id           = aws_cognito_user_pool.pool.id
   refresh_token_validity = "30"
   generate_secret        = true
 }
 
 resource "aws_cognito_user_pool_client" "TestSignIn" {
   name                   = "Test Sign in"
-  user_pool_id           = "${aws_cognito_user_pool.pool.id}"
+  user_pool_id           = aws_cognito_user_pool.pool.id
   refresh_token_validity = "30"
   generate_secret        = false
 }

@@ -35,5 +35,5 @@ module "stepfunction" {
 
   step_function_name = "${var.tag_prefix}-${var.enviroment}-stepfunc1"
   tag_name           = "${var.tag_prefix}-stepfunc-${var.enviroment}-sf"
-  vpc_id             = "${module.vpc.vpc_id}"
+  vpc_id             = module.vpc.vpc_id
 }
