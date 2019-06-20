@@ -1,5 +1,5 @@
 .idea
 .terraform
 **.tfstate
-**.tfsstate.backup
-*.tfsvars
+**.tfstate.backup
+*.tfvars
