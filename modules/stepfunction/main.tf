@@ -16,6 +16,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
     EOF
 
   tags = {
-    Name = var.tag_name
+    Name      = var.tag_name
+    Terraform = true
   }
 }
