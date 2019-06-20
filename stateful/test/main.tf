@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "tdr-prototype-terraform-state"
-    key            = "prototype-terraform/stateful/dev/terraform.tfstate"
+    key            = "prototype-terraform/stateful/test/terraform.tfstate"
     region         = "eu-west-2"
     encrypt        = true
     dynamodb_table = "terraform-statelock-tdr-prototype"
