@@ -1,3 +1,14 @@
+terraform {
+  backend "s3" {
+    bucket  = "tdr-prototype-terraform-state"
+    key     = "prototype-terraform/stateful/dev/terraform.tfstate"
+    region  = "eu-west-2"
+    encrypt = true
+    #dynamodb_table = "terraform-statelock-tdr-prototype"
+    #profile        = "terraform"
+  }
+}
+
 provider "aws" {
   access_key = var.access_key
   secret_key = var.secret_key

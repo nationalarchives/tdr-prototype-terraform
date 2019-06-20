@@ -1,4 +1,3 @@
-
 resource "aws_cognito_user_pool" "pool" {
   name = "${var.cognito_user_pool}"
 
@@ -15,7 +14,12 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   tags = {
-    Name = "${var.tag_name}"
+    Name        = "${var.tag_name}"
+    Service     = "tdr_authentication"
+    Environment = "${var.environment}"
+    Owner       = "TDR"
+    CreatedBy   = "${var.tag_created_by}"
+    Terraform   = true
   }
 }
 
