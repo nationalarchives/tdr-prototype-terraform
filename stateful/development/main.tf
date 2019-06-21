@@ -4,7 +4,7 @@ terraform {
     key            = "prototype-terraform/stateful/dev/terraform.tfstate"
     region         = "eu-west-2"
     encrypt        = true
-    dynamodb_table = "terraform-statelock-tdr-prototype"
+    dynamodb_table = "tdr-prototype-terraform-statelock"
   }
 }
 
