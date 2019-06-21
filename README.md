@@ -1,10 +1,10 @@
-#Transfer Digital Records Terraform
+# Transfer Digital Records Terraform
 
-##Purpose
+## Purpose
 
 Prototype project to outline a possible structure for Terraform to provision AWS resources for the Transfer of Digital Recordss (TDR) project
 
-##Terraform Structure
+## Terraform Structure
 
 The prototype is divided into separate Terraform modules that represent the different AWS resources that are needed to for the TDR project. Not all resources are covered as the prototype provides the overall structure.
 
@@ -17,21 +17,21 @@ The different modules are used by the stateful terraform scripts which represent
 * development
 * test
 
-##Getting Started
+## Getting Started
 
-###Install Terraform locally
+### Install Terraform locally
 
 See: https://learn.hashicorp.com/terraform/getting-started/install.html
 
-###Install AWS CLI Locally
+### Install AWS CLI Locally
 
 See instructions here to install local instance of Terraform: https://learn.hashicorp.com/terraform/getting-started/install.html
 
-###Install Terraform Plugins on Intellij
+### Install Terraform Plugins on Intellij
 
 HCL Language Support: https://plugins.jetbrains.com/plugin/7808-hashicorp-terraform--hcl-language-support
 
-##Running Prototype Project
+## Running Prototype Project
 
 1. Clone the prototype project to local machine:  https://github.com/nationalarchives/tdr-prototype-terraform
 2. Add your AWS credentials to local credential store.
@@ -82,7 +82,7 @@ HCL Language Support: https://plugins.jetbrains.com/plugin/7808-hashicorp-terraf
 
 **NOTE: PLEASE DELETE THE RESOURCES CREATED AFTER YOU HAVE FINISHED**
 
-##Further Information
+## Further Information
 
 * Terraform website: https://www.terraform.io/
 * Terraform basic tutorial: https://learn.hashicorp.com/terraform/getting-started/build
