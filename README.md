@@ -9,7 +9,7 @@ Prototype project to outline a possible structure for Terraform to provision AWS
 The prototype is divided into separate Terraform modules that represent the different AWS resources that are needed to for the TDR project. Not all resources are covered as the prototype provides the overall structure.
 
 The modules are:
-* **cognito**: provisions two skelton user groups and relevant App Clients
+* **cognito**: provisions two skeleton user groups and relevant App Clients
 * **stepfunction**: provisions a skeleton step function that uses information (vpc id) from the vpc module
 * **vpc**: provisions a skeleton vpc that exposes its id to other modules</p>
 
