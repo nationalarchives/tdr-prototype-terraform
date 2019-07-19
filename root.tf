@@ -23,6 +23,13 @@ module "global_variables" {
   source = "./modules/global_variables"
 }
 
+module "ecs" {
+  source = "./modules/ecs"
+
+  environment = local.environment
+  aws_region  = local.aws_region
+}
+
 module "cognito" {
   source = "./modules/cognito"
 

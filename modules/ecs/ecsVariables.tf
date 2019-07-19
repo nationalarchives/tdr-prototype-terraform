@@ -1,3 +1,9 @@
+variable "environment" {
+  description = "Environment resource is running in"
+  type        = string
+  default     = "dev"
+}
+
 variable "aws_region" {
   description = "The AWS region"
   default     = "eu-west-2"
