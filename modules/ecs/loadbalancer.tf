@@ -2,6 +2,15 @@ resource "aws_alb" "main" {
   name            = "tdr-app-load-balancer-${var.environment}"
   subnets         = aws_subnet.public.*.id
   security_groups = [aws_security_group.lb.id]
+
+  tags = {
+    Name        = "tdr-app-loadbalancer"
+    Service     = "tdr_app_loadbalancer"
+    Environment = var.environment
+    Owner       = "TDR"
+    CreatedBy   = var.tag_created_by
+    Terraform   = true
+  }
 }
 
 resource "aws_alb_target_group" "app" {
