@@ -26,17 +26,17 @@ resource "aws_ecs_cluster" "tdr-prototype-ecs" {
 
 resource "aws_ecs_task_definition" "tdr-application" {
   family                   = "tdr-application"
-  execution_role_arn       = "arn:aws:iam::247222723249:role/ecsTaskExecutionRole"
+  execution_role_arn       = var.ecs_task_execution_role
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = var.fargate_cpu
   memory                   = var.fargate_memory
   container_definitions    = data.template_file.tdrApplication.rendered
-  task_role_arn            = "arn:aws:iam::247222723249:role/ecsTaskExecutionRole"
+  task_role_arn            = var.ecs_task_execution_role
 }
 
 resource "aws_ecs_service" "tdr-application" {
-  name                              = "tdr-application-service"
+  name                              = "tdr-application-service-${var.environment}"
   cluster                           = aws_ecs_cluster.tdr-prototype-ecs.id
   task_definition                   = aws_ecs_task_definition.tdr-application.arn
   desired_count                     = var.app_count
