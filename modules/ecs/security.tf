@@ -1,7 +1,7 @@
 # ALB Security Group: Edit to restrict access to the application
 resource "aws_security_group" "lb" {
-  name        = "tdrApplication-load-balancer-security-group"
-  description = "controls access to the ALB"
+  name        = "tdr-application-load-balancer-security-group"
+  description = "Controls access to the TDR application load balancer"
   vpc_id      = aws_vpc.main.id
 
   ingress {
@@ -19,10 +19,10 @@ resource "aws_security_group" "lb" {
   }
 }
 
-# Traffic to the ECS cluster should only come from the ALB
+# Traffic to the ECS cluster should only come from the application load balancer
 resource "aws_security_group" "ecs_tasks" {
   name        = "tdr-application-ecs-tasks-security-group"
-  description = "allow inbound access from the ALB only"
+  description = "Allow inbound access from the TDR application load balancer only"
   vpc_id      = aws_vpc.main.id
 
   ingress {

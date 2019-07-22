@@ -1,6 +1,6 @@
 [
     {
-        "name": "tdrApplication",
+        "name": "tdr-application",
         "image": "${app_image}",
         "cpu": 0,
         "secrets": [

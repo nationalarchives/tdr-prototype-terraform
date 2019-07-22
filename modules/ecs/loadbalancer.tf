@@ -1,11 +1,11 @@
 resource "aws_alb" "main" {
-  name            = "tdrApplication-load-balancer-${var.environment}"
+  name            = "tdr-app-load-balancer-${var.environment}"
   subnets         = aws_subnet.public.*.id
   security_groups = [aws_security_group.lb.id]
 }
 
 resource "aws_alb_target_group" "app" {
-  name        = "tdrApplication-target-group"
+  name        = "tdr-app-target-group"
   port        = 9000
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
