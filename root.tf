@@ -15,7 +15,7 @@ terraform {
   }
 }
 
-provider "aws" {
+provider "aws" {  
   region = local.aws_region
 }
 
@@ -28,6 +28,12 @@ module "ecs" {
 
   environment = local.environment
   aws_region  = local.aws_region
+  tag_name    = "${local.tag_prefix}-ecs-${local.environment}"  
+}
+
+/* module "security" {
+  source = "./modules/security"
+  app_port = module.ecs.app_port
 }
 
 module "cognito" {
@@ -52,4 +58,4 @@ module "stepfunction" {
   step_function_name = "${local.tag_prefix}-${local.environment}-stepfunc1"
   tag_name           = "${local.tag_prefix}-stepfunc-${local.environment}-sf"
   vpc_id             = module.vpc.vpc_id
-}
+} */

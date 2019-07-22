@@ -1,3 +1,12 @@
+variable "tag_name" {
+
+}
+
+variable "tag_created_by" {
+  type    = string
+  default = "Tom King"
+}
+
 variable "environment" {
   description = "Environment resource is running in"
   type        = string
@@ -9,9 +18,14 @@ variable "aws_region" {
   default     = "eu-west-2"
 }
 
+variable "az_count" {
+  description = "Number of AZs to cover in a given region"
+  default     = "2"
+}
+
 variable "app_image" {
   description = "Docker image of the TDR application"
-  default       = "nationalarchives/prototype-play-app:latest"
+  default       = "docker.io/nationalarchives/prototype-play-app"
 }
 
 variable "app_port" {
