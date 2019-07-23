@@ -4,6 +4,13 @@ data "aws_availability_zones" "available" {
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
+  
+  tags = "${merge(
+    var.common_tags,
+    map(      
+      "CreatedBy", "${var.tag_created_by}"
+    )
+  )}"
 }
 
 # Create var.az_count private subnets, each in a different AZ
@@ -46,6 +53,13 @@ resource "aws_nat_gateway" "gw" {
   count         = var.az_count
   subnet_id     = element(aws_subnet.public.*.id, count.index)
   allocation_id = element(aws_eip.gw.*.id, count.index)
+
+  tags = "${merge(
+    var.common_tags,
+    map(     
+      "CreatedBy", "${var.tag_created_by}",
+    )
+  )}"
 }
 
 # Create a new route table for the private subnets, make it route non-local traffic through the NAT gateway to the internet
