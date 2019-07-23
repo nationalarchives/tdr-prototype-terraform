@@ -14,7 +14,7 @@ resource "aws_alb" "main" {
 }
 
 resource "aws_alb_target_group" "app" {
-  name        = "tdr-app-target-group"
+  name        = "tdr-app-target-group-${var.environment}"
   port        = 9000
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id

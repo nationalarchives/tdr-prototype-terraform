@@ -61,7 +61,7 @@
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
-                "awslogs-group": "/ecs/tdrApplication",
+                "awslogs-group": "/ecs/tdr-application-${app_environment}",
                 "awslogs-region": "${aws_region}",
                 "awslogs-stream-prefix": "ecs"
             }

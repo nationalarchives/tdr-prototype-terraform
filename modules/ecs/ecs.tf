@@ -16,11 +16,12 @@ resource "aws_ecs_cluster" "tdr-prototype-ecs" {
   template = file("modules/ecs/templates/tdrApplication.json.tpl")
 
   vars = {
-    app_image      = var.app_image
-    app_port       = var.app_port
-    fargate_cpu    = var.fargate_cpu
-    fargate_memory = var.fargate_memory
-    aws_region     = var.aws_region
+    app_image       = var.app_image
+    app_port        = var.app_port
+    app_environment = var.environment
+    fargate_cpu     = var.fargate_cpu
+    fargate_memory  = var.fargate_memory
+    aws_region      = var.aws_region
   }
 }
 
