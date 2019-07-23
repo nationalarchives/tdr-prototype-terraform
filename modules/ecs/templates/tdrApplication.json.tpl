@@ -5,56 +5,60 @@
         "cpu": 0,
         "secrets": [
             {
-                "valueFrom": "ACCESS_KEY_ID",
+                "valueFrom": "${app_environment}-ACCESS_KEY_ID",
                 "name": "ACCESS_KEY_ID"
             },
             {
-                "valueFrom": "SECRET_ACCESS_KEY",
+                "valueFrom": "${app_environment}-SECRET_ACCESS_KEY",
                 "name": "SECRET_ACCESS_KEY"
             },
             {
-                "valueFrom": "PLAY_SECRET_KEY",
+                "valueFrom": "${app_environment}-PLAY_SECRET_KEY",
                 "name": "PLAY_SECRET_KEY"
             },
             {
-                "valueFrom": "AUTHENTICATOR_SIGNER_KEY",
+                "valueFrom": "${app_environment}-AUTHENTICATOR_SIGNER_KEY",
                 "name": "AUTHENTICATOR_SIGNER_KEY"
             },
             {
-                "valueFrom": "AUTHENTICATOR_CRYPTER_KEY",
+                "valueFrom": "${app_environment}-AUTHENTICATOR_CRYPTER_KEY",
                 "name": "AUTHENTICATOR_CRYPTER_KEY"
             },
             {
-                "valueFrom": "CSRF_SIGNER_KEY",
+                "valueFrom": "${app_environment}-CSRF_SIGNER_KEY",
                 "name": "CSRF_SIGNER_KEY"
             },
             {
-                "valueFrom": "SOCIAL_STATE_SIGNER_KEY",
+                "valueFrom": "${app_environment}-SOCIAL_STATE_SIGNER_KEY",
                 "name": "SOCIAL_STATE_SIGNER_KEY"
             },
             {
-                "valueFrom": "COGNITO_CLIENT_ID",
+                "valueFrom": "${app_environment}-COGNITO_CLIENT_ID",
                 "name": "COGNITO_CLIENT_ID"
             },
             {
-                "valueFrom": "COGNITO_CLIENT_SECRET",
+                "valueFrom": "${app_environment}-COGNITO_CLIENT_SECRET",
                 "name": "COGNITO_CLIENT_SECRET"
             },
             {
-                "valueFrom": "COGNITO_UPLOAD_CLIENT_ID",
+                "valueFrom": "${app_environment}-COGNITO_UPLOAD_CLIENT_ID",
                 "name": "COGNITO_UPLOAD_CLIENT_ID"
             },
             {
-                "valueFrom": "USER_DB_ENDPOINT",
+                "valueFrom": "${app_environment}-USER_DB_ENDPOINT",
                 "name": "USER_DB_ENDPOINT"
             },
             {
-                "valueFrom": "USER_DB_USERS_TABLE",
+                "valueFrom": "${app_environment}-USER_DB_USERS_TABLE",
                 "name": "USER_DB_USERS_TABLE"
             },
             {
-                "valueFrom": "USER_DB_TOKENS_TABLE",
+                "valueFrom": "${app_environment}-USER_DB_TOKENS_TABLE",
                 "name": "USER_DB_TOKENS_TABLE"
+            },
+            {
+                "valueFrom": "${app_environment}-TDR_BASE_PATH",
+                "name": "TDR_BASE_PATH"
             }
         ],        
         "networkMode": "awsvpc",
