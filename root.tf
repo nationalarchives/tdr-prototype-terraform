@@ -3,6 +3,11 @@ locals {
   environment = lookup(var.workspace_to_environment_map, terraform.workspace, "dev")
   tag_prefix  = module.global_variables.tag_prefix
   aws_region  = module.global_variables.default_aws_region
+  common_tags = "${map(
+    "Environment", local.environment,
+    "Owner", "TDR",
+    "Terraform", true
+  )}"
 }
 
 terraform {
@@ -28,7 +33,8 @@ module "ecs" {
 
   environment = local.environment
   aws_region  = local.aws_region
-  tag_name    = "${local.tag_prefix}-ecs-${local.environment}"  
+  tag_name    = "${local.tag_prefix}-ecs-${local.environment}"
+  common_tags = local.common_tags 
 }
 
 /* module "security" {

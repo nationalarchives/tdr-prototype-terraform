@@ -1,15 +1,15 @@
 
 resource "aws_ecs_cluster" "tdr-prototype-ecs" {
   name = "tdr-prototype-ecs-${var.environment}"
-
-  tags = {
-    Name        = var.tag_name
-    Service     = "tdr_ecs"
-    Environment = var.environment
-    Owner       = "TDR"
-    CreatedBy   = var.tag_created_by
-    Terraform   = true
-  }
+  
+  tags = "${merge(
+    var.common_tags,
+    map(
+      "Name", "${var.tag_name}",
+      "Service", "tdr-ecs",
+      "CreatedBy", "${var.tag_created_by}"
+    )
+  )}"
 }
 
  data "template_file" "tdrApplication" {
@@ -33,6 +33,15 @@ resource "aws_ecs_task_definition" "tdr-application" {
   memory                   = var.fargate_memory
   container_definitions    = data.template_file.tdrApplication.rendered
   task_role_arn            = var.ecs_task_execution_role
+
+  tags = "${merge(
+    var.common_tags,
+    map(
+      "Name", "tdr-app-task-definition",
+      "Service", "app-task-definition",
+      "CreatedBy", "${var.tag_created_by}"
+    )
+  )}"
 }
 
 resource "aws_ecs_service" "tdr-application" {

@@ -3,14 +3,14 @@ resource "aws_alb" "main" {
   subnets         = aws_subnet.public.*.id
   security_groups = [aws_security_group.lb.id]
 
-  tags = {
-    Name        = "tdr-app-loadbalancer"
-    Service     = "tdr_app_loadbalancer"
-    Environment = var.environment
-    Owner       = "TDR"
-    CreatedBy   = var.tag_created_by
-    Terraform   = true
-  }
+  tags = "${merge(
+    var.common_tags,
+    map(
+      "Name", "tdr-app-loadbalancer",
+      "Service", "app-loadbalancer",
+      "CreatedBy", "${var.tag_created_by}"
+    )
+  )}"
 }
 
 resource "aws_alb_target_group" "app" {
@@ -29,6 +29,15 @@ resource "aws_alb_target_group" "app" {
     path                = var.health_check_path
     unhealthy_threshold = "2"
   }
+
+  tags = "${merge(
+    var.common_tags,
+    map(
+      "Name", "tdr-app-target-group",
+      "Service", "app-target-group",
+      "CreatedBy", "${var.tag_created_by}"
+    )
+  )}"
 }
 
 # Redirect all traffic from the ALB to the target group

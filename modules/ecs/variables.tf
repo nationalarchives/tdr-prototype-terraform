@@ -1,5 +1,16 @@
-variable "tag_name" {
+variable "common_tags" {
+  description = "Set of tags that are common for all resources"
+  type        = map
+}
 
+variable "tag_name" {
+  type    = string
+  default = "tdr-ecs"
+}
+
+variable "tag_service" {
+  type    = string
+  default = "tdr-ecs"
 }
 
 variable "tag_created_by" {
