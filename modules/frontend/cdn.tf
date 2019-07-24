@@ -25,7 +25,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     target_origin_id = "${local.web_origin_id}"
 
     forwarded_values {
-      query_string = false
+      query_string = true
 
       cookies {
         forward = "all"
