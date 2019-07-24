@@ -28,8 +28,8 @@ module "global_variables" {
   source = "./modules/global_variables"
 }
 
-module "ecs" {
-  source = "./modules/ecs"
+module "frontend" {
+  source = "./modules/frontend"
 
   environment = local.environment
   aws_region  = local.aws_region
