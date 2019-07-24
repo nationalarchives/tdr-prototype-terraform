@@ -7,7 +7,8 @@ resource "aws_vpc" "main" {
   
   tags = "${merge(
     var.common_tags,
-    map(      
+    map(
+      "Name", "${var.app_name}-vpc",      
       "CreatedBy", "${var.tag_created_by}"
     )
   )}"
@@ -56,8 +57,9 @@ resource "aws_nat_gateway" "gw" {
 
   tags = "${merge(
     var.common_tags,
-    map(     
-      "CreatedBy", "${var.tag_created_by}",
+    map(
+      "Name", "${var.app_name}-nat-gateway-${count.index}",     
+      "CreatedBy", "${var.tag_created_by}"
     )
   )}"
 }

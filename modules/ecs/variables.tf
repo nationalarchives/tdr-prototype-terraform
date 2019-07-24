@@ -35,7 +35,7 @@ variable "az_count" {
 }
 
 variable "app_image" {
-  description = "Docker image of the TDR application"
+  description   = "Docker image of the TDR application"
   default       = "docker.io/nationalarchives/prototype-play-app"
 }
 
@@ -47,6 +47,12 @@ variable "app_port" {
 variable "app_count" {
   description = "Number of docker containers to run"
   default     = "1"
+}
+
+variable "app_name" {
+  description = "Name of the hosted application"
+  type        = string
+  default     = "tdr-application"
 }
 
 variable "ecs_task_execution_role" {

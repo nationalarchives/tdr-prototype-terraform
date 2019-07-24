@@ -6,8 +6,7 @@ resource "aws_alb" "main" {
   tags = "${merge(
     var.common_tags,
     map(
-      "Name", "tdr-app-loadbalancer",
-      "Service", "app-loadbalancer",
+      "Name", "${var.app_name}-loadbalancer",      
       "CreatedBy", "${var.tag_created_by}"
     )
   )}"
@@ -33,8 +32,7 @@ resource "aws_alb_target_group" "app" {
   tags = "${merge(
     var.common_tags,
     map(
-      "Name", "tdr-app-target-group",
-      "Service", "app-target-group",
+      "Name", "${var.app_name}-target-group",      
       "CreatedBy", "${var.tag_created_by}"
     )
   )}"

@@ -1,6 +1,6 @@
 # ALB Security Group: Edit to restrict access to the application
 resource "aws_security_group" "lb" {
-  name        = "tdr-application-load-balancer-security-group"
+  name        = "${var.app_name}-load-balancer-security-group"
   description = "Controls access to the TDR application load balancer"
   vpc_id      = aws_vpc.main.id
 
@@ -21,8 +21,7 @@ resource "aws_security_group" "lb" {
   tags = "${merge(
     var.common_tags,
     map(
-      "Name", "tdr-load-balancer-security-group",
-      "Service", "load-balancer-security-group",
+      "Name", "${var.app_name}-load-balancer-security-group",      
       "CreatedBy", "${var.tag_created_by}"
     )
   )}"
@@ -30,7 +29,7 @@ resource "aws_security_group" "lb" {
 
 # Traffic to the ECS cluster should only come from the application load balancer
 resource "aws_security_group" "ecs_tasks" {
-  name        = "tdr-application-ecs-tasks-security-group"
+  name        = "${var.app_name}-ecs-tasks-security-group"
   description = "Allow inbound access from the TDR application load balancer only"
   vpc_id      = aws_vpc.main.id
 
@@ -51,8 +50,7 @@ resource "aws_security_group" "ecs_tasks" {
   tags = "${merge(
     var.common_tags,
     map(
-      "Name", "tdr-ecs-task-security-group",
-      "Service", "ecs-task-security-group",
+      "Name", "${var.app_name}-ecs-task-security-group",      
       "CreatedBy", "${var.tag_created_by}"
     )
   )}"
