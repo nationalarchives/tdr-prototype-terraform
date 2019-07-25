@@ -53,6 +53,18 @@ resource "aws_cognito_user_pool_domain" "main" {
   user_pool_id = "${aws_cognito_user_pool.pool.id}"
 }
 
+resource "aws_cognito_resource_server" "resource" {
+  identifier = "tdr-${var.environment}"
+  name       = "tdr-resource-server-${var.environment}"
+
+  scope {
+    scope_name        = "validate"
+    scope_description = "Allows validation"
+  }
+
+  user_pool_id = "${aws_cognito_user_pool.pool.id}"
+}
+
 resource "aws_cognito_user_pool_client" "authenticate" {
   name                         = "Authenticate"
   user_pool_id                 = aws_cognito_user_pool.pool.id
