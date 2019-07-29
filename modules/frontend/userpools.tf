@@ -66,15 +66,16 @@ resource "aws_cognito_resource_server" "resource" {
 }
 
 resource "aws_cognito_user_pool_client" "authenticate" {
-  name                         = "Authenticate"
-  user_pool_id                 = aws_cognito_user_pool.pool.id
-  refresh_token_validity       = "30"
-  generate_secret              = true
-  explicit_auth_flows          = ["ADMIN_NO_SRP_AUTH"]
-  callback_urls                = ["https://${local.cdn_domain_name}/authenticate/cognito"]
-  supported_identity_providers = ["COGNITO"]
-  allowed_oauth_scopes         = ["aws.cognito.signin.user.admin", "email", "openid", "profile"]
-  allowed_oauth_flows          = ["code"]  
+  name                                = "Authenticate"
+  user_pool_id                        = aws_cognito_user_pool.pool.id
+  refresh_token_validity               = "30"
+  generate_secret                      = true
+  explicit_auth_flows                  = ["ADMIN_NO_SRP_AUTH"]
+  callback_urls                        = ["https://${local.cdn_domain_name}/authenticate/cognito"]
+  supported_identity_providers         = ["COGNITO"]
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_scopes                 = ["aws.cognito.signin.user.admin", "email", "openid", "profile"]
+  allowed_oauth_flows                  = ["code"]  
   
   #Spaces are not permitted in attribute names, use underscores instead, in the AWS console these display as spaces
   read_attributes = ["address", "birthdate", "email", "email_verified", "family_name", 
@@ -87,14 +88,15 @@ resource "aws_cognito_user_pool_client" "authenticate" {
 }
 
 resource "aws_cognito_user_pool_client" "upload" {
-  name                         = "Upload"
-  user_pool_id                 = aws_cognito_user_pool.pool.id
-  refresh_token_validity       = "30"
-  generate_secret              = false
-  callback_urls                = ["https://${local.cdn_domain_name}/upload"]
-  supported_identity_providers = ["COGNITO"]
-  allowed_oauth_scopes         = ["openid", "profile"]
-  allowed_oauth_flows          = ["code"]  
+  name                                 = "Upload"
+  user_pool_id                         = aws_cognito_user_pool.pool.id
+  refresh_token_validity               = "30"
+  generate_secret                      = false
+  callback_urls                        = ["https://${local.cdn_domain_name}/upload"]
+  supported_identity_providers         = ["COGNITO"]
+  allowed_oauth_flows_user_pool_client = true
+  allowed_oauth_scopes                 = ["openid", "profile"]
+  allowed_oauth_flows                  = ["code"]  
   
   #Spaces are not permitted in attribute names, use underscores instead, in the AWS console these display as spaces
   read_attributes = ["address", "birthdate", "email", "email_verified", "family_name", 
