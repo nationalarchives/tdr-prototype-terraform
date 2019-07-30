@@ -20,23 +20,46 @@ resource "aws_cognito_user_pool" "pool" {
   auto_verified_attributes = ["email"]
 
   #Standard required attributes
+  #Please note all attribute schemas must EXPLICITLY define all the properties below to prevent resource replacement.
+  #See: https://www.terraform.io/docs/providers/aws/r/cognito_user_pool.html#string_attribute_constraints
   schema {
-    attribute_data_type = "String"
-    name                = "email"
-    required            = true
+    attribute_data_type      = "String"
+    name                     = "email"
+    required                 = true
+    developer_only_attribute = false
+    mutable                  = false
+    
+    string_attribute_constraints {
+      max_length = "2048"
+      min_length = "0"
+    }
   }
 
   #Custom attributes   
   schema {
-    attribute_data_type = "String"
-    name                = "department_id"
-    required            = false
+    attribute_data_type      = "String"
+    name                     = "department_id"
+    required                 = false
+    developer_only_attribute = false
+    mutable                  = false
+    
+    string_attribute_constraints {
+      max_length = "2048"
+      min_length = "0"
+    }
   }
 
   schema {
-    attribute_data_type = "String"
-    name                = "department"
-    required            = false
+    attribute_data_type      = "String"
+    name                     = "department"
+    required                 = false
+    developer_only_attribute = false
+    mutable                  = false
+    
+    string_attribute_constraints {
+      max_length = "2048"
+      min_length = "0"
+    }
   }
 
   tags = "${merge(
