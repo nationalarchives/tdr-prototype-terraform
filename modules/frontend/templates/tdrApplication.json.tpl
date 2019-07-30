@@ -1,7 +1,7 @@
 [
     {
         "name": "tdr-application",
-        "image": "${app_image}",
+        "image": "${app_image}:${app_environment}",
         "cpu": 0,
         "secrets": [
             {
@@ -59,6 +59,10 @@
             {
                 "valueFrom": "${app_environment}-TDR_BASE_PATH",
                 "name": "TDR_BASE_PATH"
+            },
+            {
+                "valueFrom": "${app_environment}-TDR_AUTH_PATH",
+                "name": "TDR_AUTH_PATH"
             }
         ],        
         "networkMode": "awsvpc",
