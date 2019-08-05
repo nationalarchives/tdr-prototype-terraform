@@ -6,16 +6,12 @@ Prototype project to outline a possible structure for Terraform to provision AWS
 
 ## Terraform Structure
 
-The prototype is divided into separate Terraform modules that represent the different AWS resources that are needed to for the TDR project. Not all resources are covered as the prototype provides the overall structure.
+The prototype is divided into separate Terraform modules that represent the different AWS resources that are needed to for the TDR project.
 
-The modules are:
-* **cognito**: provisions two skelton user groups and relevant App Clients
-* **stepfunction**: provisions a skeleton step function that uses information (vpc id) from the vpc module
-* **vpc**: provisions a skeleton vpc that exposes its id to other modules</p>
-
-The different modules are used by the stateful terraform scripts which represent two AWS environments:
+The different modules are used by Terraform workspaces which represent three AWS environments:
 * development
 * test
+* prod
 
 ## Getting Started
 
@@ -50,37 +46,44 @@ HCL Language Support: https://plugins.jetbrains.com/plugin/7808-hashicorp-terraf
 
 4. Open command terminal on your local machine
 5. In the command terminal navigate to the folder where the project has been cloned to
-6. In the command terminal navigate to the “development” Terraform enviroment folder within the project: `/stateful/development`
-7. Once in the correct directory in the command terminal run the following command: `$ terraform init`
+6. Create a "dev" Terraform workspace:
+   ```
+    $ terraform workspace new dev
+   ```
+7. Swith to the new 'dev' workspace:
+   ``` 
+    $ terraform workspace select dev
+   ```
+8. In the command terminal navigate to the root of the project
+9. Once in the correct directory in the command terminal run the following command: 
+   ```
+    $ terraform init
+    ```
 
    * This will initiate terraform locally.
 
-8. When Terraform has initiated run the following command: `$ terraform apply`
+10. When Terraform has initiated run the following command: `$ terraform apply`
 
    * This will generate what Terraform will create and provide and outline of this in the command terminal
 
-9. To create the AWS resources type “yes” when prompted in the command terminal
-10. Terraform will create the AWS resources.
+11. To create the AWS resources type “yes” when prompted in the command terminal
+12. Terraform will create the AWS resources.
 
-    Once complete go to the AWS Management Console and check that the following AWS resources have been created:
+    Once complete go to the AWS Management Console and check that the following AWS resources have been created.     
 
-     * **Cognito User Pools**: tdr-prototype-dev
-     * **Step Functions**: tdr-prototype-dev-stepfunc1
-     * **VPC**: tdr-prototype-cloud-dev-vpc1
-
-11. Destroy the AWS resources by running the following command: `$ terraform destroy`
+13. To destroy the AWS resources run the following command: `$ terraform destroy`
 
     * This will generate what Terraform will destroy and provide an outline of this in the command terminal
 
-12. To destroy the AWS resources type “yes” when prompted
+14. To destroy the AWS resources type “yes” when prompted
 
-13. Terraform will destroy the AWS resources.
+15. Terraform will destroy the AWS resources.
 
     * Once complete go to the AWS console and check that the AWS resources no longer exist.
 
     **NOTE**: this may take a few minutes to complete.
 
-**NOTE: PLEASE DELETE THE RESOURCES CREATED AFTER YOU HAVE FINISHED**
+**NOTE: PLEASE DO NOT DELETE THE RESOURCES UNLESS ABSOLUTELY SURE AS THESE RESOURCES ARE BEING USED FOR DEVELOPMENT**
 
 ## Further Information
 
