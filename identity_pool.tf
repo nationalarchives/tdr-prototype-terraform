@@ -23,8 +23,8 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
       identity_pool_id = "${aws_cognito_identity_pool.main.id}"
 
       roles = {
-           "authenticated"   = "arn:aws:iam::247222723249:role/Cognito_TDRIdentityPoolAuth_Role"
-           "unauthenticated" = "arn:aws:iam::247222723249:role/Cognito_TDRIdentityPoolUnauth_Role"
+           "authenticated"   = "arn:aws:iam::247222723249:role/Cognito_devTDRIdentityPoolAuth_Role"
+           "unauthenticated" = "arn:aws:iam::247222723249:role/Cognito_devTDRIdentityPoolUnauth_Role"
       }
  }
 
