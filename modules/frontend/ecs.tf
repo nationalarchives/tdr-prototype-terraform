@@ -24,7 +24,7 @@ resource "aws_ecs_cluster" "tdr-prototype-ecs" {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = var.app_name
+  family                   = "${var.app_name}-${var.environment}"
   execution_role_arn       = var.ecs_task_execution_role
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
