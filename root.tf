@@ -1,6 +1,6 @@
 locals {
   #Ensure that developers' workspaces always default to 'dev'
-  environment = lookup(var.workspace_to_environment_map, terraform.workspace, "dev")
+  environment = lookup(var.workspace_to_environment_map, terraform.workspace, "test")
   tag_prefix  = module.global_variables.tag_prefix
   aws_region  = module.global_variables.default_aws_region
   common_tags = map(
@@ -35,6 +35,33 @@ module "frontend" {
   aws_region  = local.aws_region
   tag_name    = "${local.tag_prefix}-ecs-${local.environment}"
   common_tags = local.common_tags 
+}
+
+module "virus_check" {
+  source = "./modules/virus_check"
+
+  environment = local.environment
+  aws_region  = local.aws_region
+  tag_name    = "${local.tag_prefix}-ecs-virus-check-${local.environment}"
+  common_tags = local.common_tags 
+}
+
+module "file_format_check" {
+  source = "./modules/file_format_check"
+
+  environment = local.environment
+  aws_region  = local.aws_region
+  tag_name    = "${local.tag_prefix}-ecs-file-format-check-${local.environment}"
+  common_tags = local.common_tags
+}
+
+module "checksum_check" {
+  source = "./modules/checksum_check"
+
+  environment = local.environment
+  aws_region  = local.aws_region
+  tag_name    = "${local.tag_prefix}-ecs-checksum-check-${local.environment}"
+  common_tags = local.common_tags
 }
 
 /* module "security" {
