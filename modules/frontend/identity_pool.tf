@@ -28,32 +28,32 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
         }
  }
 
- resource "aws_iam_role" "authenticated" {
-     name = "${var.environment}_Cognito_TDRIdentityPoolAuth_Role"     
-    
-     assume_role_policy = <<EOF
-{
-            "Version": "2012-10-17",
-            "Statement": [
-                {
-                    "Effect": "Allow",
-                    "Principal": {
-                        "Federated": "cognito-identity.amazonaws.com"
-                    },
-                    "Action": "sts:AssumeRoleWithWebIdentity",
-                    "Condition": {
-                    "StringEquals": {
-                            "cognito-identity.amazonaws.com:aud": "${aws_cognito_identity_pool.main.id}"
-                        },
-                        "ForAnyValue:StringLike": {
-                            "cognito-identity.amazonaws.com:amr": "authenticated"
-                        }
-                    }
-                }
-            ]
-    }
-    EOF
+ data "aws_iam_policy_document" "authenticated_assume_role" {
+   version = "2012-10-17"
+   statement {
+     effect  = "Allow"
+     actions = ["sts:AssumeRoleWithWebIdentity"]
+     principals {
+       type        = "Federated"
+       identifiers = ["cognito-identity.amazonaws.com"]
+     }
+     condition {
+       test     = "StringEquals"
+       variable = "cognito-identity.amazonaws.com:aud"
+       values   = ["${aws_cognito_identity_pool.main.id}"]
+     }
+     condition {
+       test     = "ForAnyValue:StringLike"
+       variable = "cognito-identity.amazonaws.com:amr"
+       values   = ["authenticated"]
+     }
+   }
+ }
 
+ resource "aws_iam_role" "authenticated" {
+    name               = "${var.environment}_Cognito_TDRIdentityPoolAuth_Role"   
+    assume_role_policy = "${data.aws_iam_policy_document.authenticated_assume_role.json}"
+    
     tags = "${merge(
         var.common_tags,
         map(
@@ -63,30 +63,31 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
     )}"
  }
 
+ data "aws_iam_policy_document" "unauthenticated_assume_role" {
+   version = "2012-10-17"
+   statement {
+     effect  = "Allow"
+     actions = ["sts:AssumeRoleWithWebIdentity"]
+     principals {
+       type        = "Federated"
+       identifiers = ["cognito-identity.amazonaws.com"]
+     }
+     condition {
+       test     = "StringEquals"
+       variable = "cognito-identity.amazonaws.com:aud"
+       values   = ["${aws_cognito_identity_pool.main.id}"]
+     }
+     condition {
+       test     = "ForAnyValue:StringLike"
+       variable = "cognito-identity.amazonaws.com:amr"
+       values   = ["unauthenticated"]
+     }
+   }
+ }
+
  resource "aws_iam_role" "unauthenticated" {
-      name = "${var.environment}_Cognito_TDRIdentityPoolUnauth_Role"     
-      assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Federated": "cognito-identity.amazonaws.com"
-      },
-      "Action": "sts:AssumeRoleWithWebIdentity",
-      "Condition": {
-        "StringEquals": {
-          "cognito-identity.amazonaws.com:aud": "${aws_cognito_identity_pool.main.id}"
-        },
-        "ForAnyValue:StringLike": {
-          "cognito-identity.amazonaws.com:amr": "unauthenticated"
-        }
-      }
-    }
-  ]
-}
-    EOF
+      name               = "${var.environment}_Cognito_TDRIdentityPoolUnauth_Role"     
+      assume_role_policy = "${data.aws_iam_policy_document.unauthenticated_assume_role.json}"
 
     tags = "${merge(
         var.common_tags,
@@ -101,7 +102,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
  data "aws_iam_policy_document" "oneClick_Auth_Role" {
      version = "2012-10-17"
      statement {
-         effect = "Allow"
+         effect  = "Allow"
          actions = [
              "mobileanalytics:PutEvents",
              "cognito-sync:*",
@@ -114,8 +115,8 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
  }
 
  resource "aws_iam_policy" "oneClick_Cognito_TDRIdentityPoolAuth_Role" {
-     name = "oneClick_Cognito_TDRIdentityPoolAuth_Role"
-     path = "/"
+     name   = "oneClick_Cognito_TDRIdentityPoolAuth_Role"
+     path   = "/"
      policy = "${data.aws_iam_policy_document.oneClick_Auth_Role.json}"
  }
 
