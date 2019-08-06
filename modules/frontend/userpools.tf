@@ -1,5 +1,5 @@
 locals {
-    cdn_domain_name = "${aws_cloudfront_distribution.web_distribution.domain_name}"    
+    cdn_domain_name = aws_cloudfront_distribution.web_distribution.domain_name
 }
 
 resource "aws_cognito_user_pool" "pool" {
@@ -62,18 +62,18 @@ resource "aws_cognito_user_pool" "pool" {
     }
   }
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-user-pool-${var.environment}",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
 resource "aws_cognito_user_pool_domain" "main" {
   domain       = "tdr-${var.environment}"
-  user_pool_id = "${aws_cognito_user_pool.pool.id}"
+  user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 resource "aws_cognito_resource_server" "resource" {
@@ -85,7 +85,7 @@ resource "aws_cognito_resource_server" "resource" {
     scope_description = "Allows validation"
   }
 
-  user_pool_id = "${aws_cognito_user_pool.pool.id}"
+  user_pool_id = aws_cognito_user_pool.pool.id
 }
 
 resource "aws_cognito_user_pool_client" "authenticate" {

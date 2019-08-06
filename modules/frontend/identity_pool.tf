@@ -8,19 +8,19 @@ resource "aws_cognito_identity_pool" "main" {
 
   cognito_identity_providers {
     client_id               = aws_cognito_user_pool_client.authenticate.id
-    provider_name           = "${local.frontend_provider_name}"
+    provider_name           = local.frontend_provider_name
     server_side_token_check = false
   }
 
   cognito_identity_providers {
     client_id               = aws_cognito_user_pool_client.upload.id
-    provider_name           = "${local.frontend_provider_name}"
+    provider_name           = local.frontend_provider_name
     server_side_token_check = false
   } 
 }
 
 resource "aws_cognito_identity_pool_roles_attachment" "main" {
-      identity_pool_id = "${aws_cognito_identity_pool.main.id}"
+      identity_pool_id = aws_cognito_identity_pool.main.id
 
       roles = {
            authenticated   = aws_iam_role.authenticated.arn
@@ -40,7 +40,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
      condition {
        test     = "StringEquals"
        variable = "cognito-identity.amazonaws.com:aud"
-       values   = ["${aws_cognito_identity_pool.main.id}"]
+       values   = [aws_cognito_identity_pool.main.id]
      }
      condition {
        test     = "ForAnyValue:StringLike"
@@ -52,15 +52,15 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 
  resource "aws_iam_role" "authenticated" {
     name               = "${var.environment}_Cognito_TDRIdentityPoolAuth_Role"   
-    assume_role_policy = "${data.aws_iam_policy_document.authenticated_assume_role.json}"
+    assume_role_policy = data.aws_iam_policy_document.authenticated_assume_role.json
     
-    tags = "${merge(
+    tags = merge(
         var.common_tags,
         map(
-          "Name", "${var.tag_name}",      
-          "CreatedBy", "${var.tag_created_by}"
+          "Name", var.tag_name,
+          "CreatedBy", var.tag_created_by
         )
-    )}"
+    )
  }
 
  data "aws_iam_policy_document" "unauthenticated_assume_role" {
@@ -75,7 +75,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
      condition {
        test     = "StringEquals"
        variable = "cognito-identity.amazonaws.com:aud"
-       values   = ["${aws_cognito_identity_pool.main.id}"]
+       values   = [aws_cognito_identity_pool.main.id]
      }
      condition {
        test     = "ForAnyValue:StringLike"
@@ -87,15 +87,15 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
 
  resource "aws_iam_role" "unauthenticated" {
       name               = "${var.environment}_Cognito_TDRIdentityPoolUnauth_Role"     
-      assume_role_policy = "${data.aws_iam_policy_document.unauthenticated_assume_role.json}"
+      assume_role_policy = data.aws_iam_policy_document.unauthenticated_assume_role.json
 
-    tags = "${merge(
+    tags = merge(
         var.common_tags,
         map(
-          "Name", "${var.tag_name}",      
-          "CreatedBy", "${var.tag_created_by}"
+          "Name", var.tag_name,
+          "CreatedBy", var.tag_created_by
         )
-    )}"
+    )
  }
 
 /* Generate policies */
@@ -117,21 +117,21 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
  resource "aws_iam_policy" "oneClick_Cognito_TDRIdentityPoolAuth_Role" {
      name   = "oneClick_Cognito_TDRIdentityPoolAuth_Role"
      path   = "/"
-     policy = "${data.aws_iam_policy_document.oneClick_Auth_Role.json}"
+     policy = data.aws_iam_policy_document.oneClick_Auth_Role.json
  }
 
 /* Attach policies to IAM roles */
 resource "aws_iam_role_policy_attachment" "auth_role_attach-s3Access" {
-  role       = "${aws_iam_role.authenticated.name}"  
+  role       = aws_iam_role.authenticated.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "auth_role_attach-oneClick" {
-  role       = "${aws_iam_role.authenticated.name}"  
-  policy_arn = "${aws_iam_policy.oneClick_Cognito_TDRIdentityPoolAuth_Role.arn}"
+  role       = aws_iam_role.authenticated.name
+  policy_arn = aws_iam_policy.oneClick_Cognito_TDRIdentityPoolAuth_Role.arn
 }
 
 resource "aws_iam_role_policy_attachment" "unauth_role_attach-oneClick" {
-  role       = "${aws_iam_role.unauthenticated.name}"  
-  policy_arn = "${aws_iam_policy.oneClick_Cognito_TDRIdentityPoolAuth_Role.arn}"
+  role       = aws_iam_role.unauthenticated.name
+  policy_arn = aws_iam_policy.oneClick_Cognito_TDRIdentityPoolAuth_Role.arn
 }

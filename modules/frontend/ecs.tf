@@ -1,13 +1,13 @@
 resource "aws_ecs_cluster" "tdr-prototype-ecs" {
   name = "tdr-prototype-ecs-${var.environment}"
   
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
-      "Name", "${var.tag_name}",      
-      "CreatedBy", "${var.tag_created_by}"
+      "Name", var.tag_name,
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
  data "template_file" "app" {
@@ -33,13 +33,13 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions    = data.template_file.app.rendered
   task_role_arn            = var.ecs_task_execution_role
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-task-definition",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
 resource "aws_ecs_service" "app" {

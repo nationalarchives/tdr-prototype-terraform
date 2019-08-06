@@ -18,13 +18,13 @@ resource "aws_security_group" "lb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-load-balancer-security-group",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
 # Traffic to the ECS cluster should only come from the application load balancer
@@ -47,11 +47,11 @@ resource "aws_security_group" "ecs_tasks" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-ecs-task-security-group",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }

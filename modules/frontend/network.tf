@@ -5,13 +5,13 @@ data "aws_availability_zones" "available" {
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
   
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-vpc",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
 # Create var.az_count private subnets, each in a different AZ
@@ -21,13 +21,13 @@ resource "aws_subnet" "private" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
   vpc_id            = aws_vpc.main.id
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-private-subnet-${count.index}",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
 # Create var.az_count public subnets, each in a different AZ
@@ -38,13 +38,13 @@ resource "aws_subnet" "public" {
   vpc_id                  = aws_vpc.main.id
   map_public_ip_on_launch = true
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-public-subnet-${count.index}",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
 # Internet Gateway for the public subnet
@@ -71,13 +71,13 @@ resource "aws_nat_gateway" "gw" {
   subnet_id     = element(aws_subnet.public.*.id, count.index)
   allocation_id = element(aws_eip.gw.*.id, count.index)
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
       "Name", "${var.app_name}-nat-gateway-${count.index}",     
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", var.tag_created_by
     )
-  )}"
+  )
 }
 
 # Create a new route table for the private subnets, make it route non-local traffic through the NAT gateway to the internet
