@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "virus_check" {
     var.common_tags,
     map(
       "Name", "${var.virus_check_name}-task-definition",      
-      "CreatedBy", "${var.tag_created_by}"
+      "CreatedBy", "${var.username}"
     )
   )}"
 }

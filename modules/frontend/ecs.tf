@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "tdr-prototype-ecs" {
     var.common_tags,
     map(
       "Name", var.tag_name,
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }
@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "app" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-task-definition",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }

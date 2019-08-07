@@ -13,9 +13,8 @@ variable "tag_service" {
   default = "tdr-ecs"
 }
 
-variable "tag_created_by" {
+variable "username" {
   type    = string
-  default = "Tom King"
 }
 
 variable "environment" {

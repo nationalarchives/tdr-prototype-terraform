@@ -22,7 +22,7 @@ resource "aws_security_group" "lb" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-load-balancer-security-group",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }
@@ -51,7 +51,7 @@ resource "aws_security_group" "ecs_tasks" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-ecs-task-security-group",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }

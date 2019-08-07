@@ -7,7 +7,7 @@ resource "aws_alb" "main" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-loadbalancer",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }
@@ -33,7 +33,7 @@ resource "aws_alb_target_group" "app" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-target-group",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }

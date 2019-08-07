@@ -58,7 +58,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
         var.common_tags,
         map(
           "Name", var.tag_name,
-          "CreatedBy", var.tag_created_by
+          "CreatedBy", var.username
         )
     )
  }
@@ -93,7 +93,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
         var.common_tags,
         map(
           "Name", var.tag_name,
-          "CreatedBy", var.tag_created_by
+          "CreatedBy", var.username
         )
     )
  }
@@ -115,7 +115,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
  }
 
  resource "aws_iam_policy" "oneClick_Cognito_TDRIdentityPoolAuth_Role" {
-     name   = "oneClick_Cognito_TDRIdentityPoolAuth_Role"
+     name   = "oneClick_Cognito_TDRIdentityPoolAuth_Role_${var.environment}"
      path   = "/"
      policy = data.aws_iam_policy_document.oneClick_Auth_Role.json
  }
