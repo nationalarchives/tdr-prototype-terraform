@@ -54,3 +54,13 @@ variable "checksum_check_name" {
   description = "The name of the file format check task"
   default = "tdr-checksum-check"
 }
+
+variable "app_name" {
+  description = "Name of the hosted application"
+  type        = string
+  default     = "tdr-checksum-check"
+}
+
+variable "ecs_vpc" {
+  description = "The vpc for the task"
+}

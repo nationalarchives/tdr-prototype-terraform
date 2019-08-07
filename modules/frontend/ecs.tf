@@ -52,7 +52,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
-    subnets          = aws_subnet.private.*.id
+    subnets          = var.ecs_private_subnet
     assign_public_ip = false
   }
 
