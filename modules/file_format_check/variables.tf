@@ -14,10 +14,6 @@ variable "tag_service" {
   default = "tdr-ecs"
 }
 
-variable "username" {
-  type    = string
-}
-
 variable "environment" {
   description = "Environment resource is running in"
   type        = string

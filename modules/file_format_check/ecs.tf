@@ -18,11 +18,10 @@ resource "aws_ecs_task_definition" "file_format_check" {
   container_definitions    = data.template_file.file_format_check.rendered
   task_role_arn            = var.ecs_task_execution_role
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
-      "Name", "${var.file_format_check_name}-task-definition",      
-      "CreatedBy", "${var.username}"
+      "Name", "${var.file_format_check_name}-task-definition",
     )
-  )}"
+  )
 }

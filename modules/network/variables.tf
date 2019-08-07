@@ -8,10 +8,6 @@ variable "az_count" {
   default     = "2"
 }
 
-variable "username" {
-  type = string
-}
-
 variable "app_name" {
   type = string
 }

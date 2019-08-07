@@ -52,9 +52,6 @@ resource "aws_cloudfront_distribution" "web_distribution" {
 
   tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.app_name}-cdn",
-      "CreatedBy", var.username
-    )
+    map("Name", "${var.app_name}-cdn")
   )
 }

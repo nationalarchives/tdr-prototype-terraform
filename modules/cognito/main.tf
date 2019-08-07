@@ -18,7 +18,6 @@ resource "aws_cognito_user_pool" "pool" {
     Service     = "tdr_authentication"
     Environment = var.environment
     Owner       = "TDR"
-    CreatedBy   = var.username
     Terraform   = true
   }
 }

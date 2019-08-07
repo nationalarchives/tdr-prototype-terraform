@@ -4,11 +4,11 @@ locals {
   tag_prefix  = module.global_variables.tag_prefix
   aws_region  = module.global_variables.default_aws_region
   common_tags = map(
+    "CreatedBy", module.caller.caller_arn,
     "Environment", local.environment,
     "Owner", "TDR",
     "Terraform", true
   )
-  username = module.caller.caller_arn
   ecs_vpc = module.ecs_network.ecs_vpc
   ecs_public_subnet = module.ecs_network.ecs_public_subnet
   ecs_private_subnet = module.ecs_network.ecs_private_subnet
@@ -42,7 +42,6 @@ module "frontend" {
   ecs_vpc = local.ecs_vpc
   ecs_private_subnet = local.ecs_private_subnet
   ecs_public_subnet = local.ecs_public_subnet
-  username = local.username
 }
 
 module "virus_check" {
@@ -52,7 +51,6 @@ module "virus_check" {
   aws_region  = local.aws_region
   tag_name    = "${local.tag_prefix}-ecs-virus-check-${local.environment}"
   common_tags = local.common_tags
-  username = local.username
 }
 
 module "file_format_check" {
@@ -62,7 +60,6 @@ module "file_format_check" {
   aws_region  = local.aws_region
   tag_name    = "${local.tag_prefix}-ecs-file-format-check-${local.environment}"
   common_tags = local.common_tags
-  username = local.username
 }
 
 module "checksum_check" {
@@ -73,12 +70,10 @@ module "checksum_check" {
   tag_name    = "${local.tag_prefix}-ecs-checksum-check-${local.environment}"
   common_tags = local.common_tags
   ecs_vpc = local.ecs_vpc
-  username = local.username
 }
 
 module "ecs_network" {
   source = "./modules/network"
-  username = local.username
   common_tags = local.common_tags
   app_name = "ecs"
 }

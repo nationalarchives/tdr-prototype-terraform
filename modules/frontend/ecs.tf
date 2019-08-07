@@ -3,10 +3,7 @@ resource "aws_ecs_cluster" "tdr-prototype-ecs" {
   
   tags = merge(
     var.common_tags,
-    map(
-      "Name", var.tag_name,
-      "CreatedBy", var.username
-    )
+    map("Name", var.tag_name)
   )
 }
 
@@ -35,10 +32,7 @@ resource "aws_ecs_task_definition" "app" {
 
   tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.app_name}-task-definition",      
-      "CreatedBy", var.username
-    )
+    map("Name", "${var.app_name}-task-definition")
   )
 }
 
