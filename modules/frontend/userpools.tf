@@ -66,7 +66,7 @@ resource "aws_cognito_user_pool" "pool" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-user-pool-${var.environment}",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }

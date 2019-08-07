@@ -54,7 +54,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-cdn",
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }

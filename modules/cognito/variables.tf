@@ -3,10 +3,9 @@ variable "tag_name" {
   type        = string
 }
 
-variable "tag_created_by" {
-  description = "Email of creator"
+variable "username" {
+  description = "Arn of creator user"
   type        = string
-  default     = "tdr"
 }
 
 variable "environment" {

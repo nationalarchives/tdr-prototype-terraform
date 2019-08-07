@@ -1,6 +1,6 @@
 locals {
   #Ensure that developers' workspaces always default to 'dev'
-  environment = lookup(var.workspace_to_environment_map, terraform.workspace, "dev")
+  environment = lookup(var.workspace_to_environment_map, terraform.workspace, "test")
   tag_prefix  = module.global_variables.tag_prefix
   aws_region  = module.global_variables.default_aws_region
   common_tags = map(
@@ -8,6 +8,10 @@ locals {
     "Owner", "TDR",
     "Terraform", true
   )
+  username = module.caller.caller_arn
+  ecs_vpc = module.ecs_network.ecs_vpc
+  ecs_public_subnet = module.ecs_network.ecs_public_subnet
+  ecs_private_subnet = module.ecs_network.ecs_private_subnet
 }
 
 terraform {
@@ -34,7 +38,53 @@ module "frontend" {
   environment = local.environment
   aws_region  = local.aws_region
   tag_name    = "${local.tag_prefix}-ecs-${local.environment}"
-  common_tags = local.common_tags 
+  common_tags = local.common_tags
+  ecs_vpc = local.ecs_vpc
+  ecs_private_subnet = local.ecs_private_subnet
+  ecs_public_subnet = local.ecs_public_subnet
+  username = local.username
+}
+
+module "virus_check" {
+  source = "./modules/virus_check"
+
+  environment = local.environment
+  aws_region  = local.aws_region
+  tag_name    = "${local.tag_prefix}-ecs-virus-check-${local.environment}"
+  common_tags = local.common_tags
+  username = local.username
+}
+
+module "file_format_check" {
+  source = "./modules/file_format_check"
+
+  environment = local.environment
+  aws_region  = local.aws_region
+  tag_name    = "${local.tag_prefix}-ecs-file-format-check-${local.environment}"
+  common_tags = local.common_tags
+  username = local.username
+}
+
+module "checksum_check" {
+  source = "./modules/checksum_check"
+
+  environment = local.environment
+  aws_region  = local.aws_region
+  tag_name    = "${local.tag_prefix}-ecs-checksum-check-${local.environment}"
+  common_tags = local.common_tags
+  ecs_vpc = local.ecs_vpc
+  username = local.username
+}
+
+module "ecs_network" {
+  source = "./modules/network"
+  username = local.username
+  common_tags = local.common_tags
+  app_name = "ecs"
+}
+
+module "caller" {
+  source = "./modules/caller"
 }
 
 /* module "security" {

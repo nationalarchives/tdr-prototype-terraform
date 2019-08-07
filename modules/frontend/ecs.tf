@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "tdr-prototype-ecs" {
     var.common_tags,
     map(
       "Name", var.tag_name,
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }
@@ -37,7 +37,7 @@ resource "aws_ecs_task_definition" "app" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-task-definition",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }
@@ -52,7 +52,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
-    subnets          = aws_subnet.private.*.id
+    subnets          = var.ecs_private_subnet
     assign_public_ip = false
   }
 

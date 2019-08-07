@@ -2,7 +2,7 @@
 resource "aws_security_group" "lb" {
   name        = "${var.app_name}-load-balancer-security-group"
   description = "Controls access to the TDR application load balancer"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.ecs_vpc
 
   ingress {
     protocol    = "tcp"
@@ -22,7 +22,7 @@ resource "aws_security_group" "lb" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-load-balancer-security-group",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }
@@ -31,7 +31,7 @@ resource "aws_security_group" "lb" {
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.app_name}-ecs-tasks-security-group"
   description = "Allow inbound access from the TDR application load balancer only"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.ecs_vpc
 
   ingress {
     protocol        = "tcp"
@@ -51,7 +51,7 @@ resource "aws_security_group" "ecs_tasks" {
     var.common_tags,
     map(
       "Name", "${var.app_name}-ecs-task-security-group",      
-      "CreatedBy", var.tag_created_by
+      "CreatedBy", var.username
     )
   )
 }

@@ -13,9 +13,8 @@ variable "tag_service" {
   default = "tdr-ecs"
 }
 
-variable "tag_created_by" {
+variable "username" {
   type    = string
-  default = "Tom King"
 }
 
 variable "environment" {
@@ -72,4 +71,16 @@ variable "fargate_cpu" {
 variable "fargate_memory" {
   description = "Fargate instance memory to provision (in MiB)"
   default     = "2048"
+}
+
+variable "ecs_vpc" {
+  description = "The VPC for the application"
+}
+
+variable "ecs_private_subnet" {
+  description = "The private subnet for the application"
+}
+
+variable "ecs_public_subnet" {
+  description = "The public subnet for the application"
 }
