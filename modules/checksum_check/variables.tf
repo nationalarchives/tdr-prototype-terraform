@@ -56,6 +56,11 @@ variable "app_name" {
   default     = "tdr-checksum-check"
 }
 
+variable "container_name" {
+  description = "The name of the container for the ecs task"
+  default = "checksum-check-container"
+}
+
 variable "ecs_vpc" {
   description = "The vpc for the task"
 }

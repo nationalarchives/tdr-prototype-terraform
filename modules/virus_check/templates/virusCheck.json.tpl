@@ -1,6 +1,6 @@
 [
     {
-        "name": "tdr-virus-check",
+        "name": "${container_name}",
         "image": "${virus_check_image}:${app_environment}",
         "cpu": 0,
         "secrets": [

@@ -1,7 +1,7 @@
 
 variable "common_tags" {
   description = "Set of tags that are common for all resources"
-  type        = map
+  type        = map(string)
 }
 
 variable "tag_name" {
@@ -48,4 +48,9 @@ variable "virus_check_image" {
 variable "virus_check_name" {
   description = "The name of the virus check task"
   default = "tdr-virus-check"
+}
+
+variable "container_name" {
+  description = "The name of the container"
+  default = "virus-check-image"
 }

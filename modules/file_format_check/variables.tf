@@ -49,3 +49,9 @@ variable "file_format_check_name" {
   description = "The name of the file format check task"
   default = "tdr-file-format-check"
 }
+
+variable "container_name" {
+  description = "The name of the container"
+  default = "file-format-check-image"
+}
+

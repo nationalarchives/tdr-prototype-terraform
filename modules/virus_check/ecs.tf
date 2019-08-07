@@ -5,6 +5,7 @@
     virus_check_image = var.virus_check_image
     app_environment = var.environment
     aws_region      = var.aws_region
+    container_name = "${var.container_name}-${var.environment}"
   }
 }
 
