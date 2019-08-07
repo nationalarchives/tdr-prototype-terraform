@@ -16,4 +16,10 @@ variable "app_name" {
   type = string
 }
 
+variable "environment" {
+  description = "Environment resource is running in"
+  type        = string
+  default     = "dev"
+}
+
 
