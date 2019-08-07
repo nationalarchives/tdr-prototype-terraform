@@ -1,6 +1,6 @@
 # Traffic to the ECS cluster should only come from the application load balancer
 resource "aws_security_group" "ecs_tasks" {
-  name        = "${var.app_name}-ecs-tasks-security-group"
+  name        = "${var.environment}-ecs-tasks-security-group"
   description = "Allow inbound access from the TDR application load balancer only"
   vpc_id      = var.ecs_vpc
 
@@ -14,7 +14,7 @@ resource "aws_security_group" "ecs_tasks" {
   tags = merge(
   var.common_tags,
   map(
-  "Name", "${var.app_name}-ecs-task-security-group",
+  "Name", "${var.environment}-ecs-task-security-group",
   "CreatedBy", var.username
   )
   )
