@@ -64,7 +64,7 @@ resource "aws_nat_gateway" "gw" {
 
   tags = merge(
     var.common_tags,
-    map("Name", "nat-gateway-${count.index}")
+    map("Name", "nat-gateway-${count.index}-${var.environment}")
   )
 }
 
@@ -77,6 +77,11 @@ resource "aws_route_table" "private" {
     cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.gw.*.id[count.index]
   }
+
+  tags = merge(
+    var.common_tags,
+    map("Name", "route-table-${count.index}-${var.environment}")
+  )
 }
 
 # Explicitly associate the newly created route tables to the private subnets (so they don't default to the main route table)
