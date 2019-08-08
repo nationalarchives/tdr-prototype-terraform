@@ -5,6 +5,7 @@
     virus_check_image = var.virus_check_image
     app_environment = var.environment
     aws_region      = var.aws_region
+    container_name = "${var.container_name}-${var.environment}"
   }
 }
 
@@ -18,11 +19,10 @@ resource "aws_ecs_task_definition" "virus_check" {
   container_definitions    = data.template_file.virus_check.rendered
   task_role_arn            = var.ecs_task_execution_role
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
     map(
-      "Name", "${var.virus_check_name}-task-definition",      
-      "CreatedBy", "${var.username}"
+      "Name", "${var.virus_check_name}-task-definition-${var.environment}",
     )
-  )}"
+  )
 }

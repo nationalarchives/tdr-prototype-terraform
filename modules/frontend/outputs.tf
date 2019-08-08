@@ -17,3 +17,7 @@ output "app_client_authenticate_id" {
 output "app_client_upload_id" {
   value = aws_cognito_user_pool_client.upload.id
 }
+
+output "app_cluster_arn" {
+  value = aws_ecs_cluster.tdr-prototype-ecs.arn
+}

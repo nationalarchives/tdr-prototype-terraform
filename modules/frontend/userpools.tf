@@ -64,10 +64,7 @@ resource "aws_cognito_user_pool" "pool" {
 
   tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.app_name}-user-pool-${var.environment}",      
-      "CreatedBy", var.username
-    )
+    map("Name", "${var.app_name}-user-pool-${var.environment}")
   )
 }
 

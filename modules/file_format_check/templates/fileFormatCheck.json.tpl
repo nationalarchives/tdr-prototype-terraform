@@ -1,6 +1,6 @@
 [
     {
-        "name": "tdr-file-format-check",
+        "name": "${container_name}",
         "image": "${file_format_check_image}:${app_environment}",
         "cpu": 0,
         "secrets": [

@@ -3,11 +3,6 @@ variable "tag_name" {
   type        = string
 }
 
-variable "username" {
-  description = "Arn of creator user"
-  type        = string
-}
-
 variable "environment" {
   description = "Environment resource is running in"
   type        = string

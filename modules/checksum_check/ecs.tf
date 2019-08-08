@@ -5,6 +5,7 @@
     checksum_check_image = var.checksum_check_image
     app_environment = var.environment
     aws_region      = var.aws_region
+    container_name = "${var.container_name}-${var.environment}"
   }
 }
 
@@ -18,11 +19,8 @@ resource "aws_ecs_task_definition" "checksum_check" {
   container_definitions    = data.template_file.checksum_check.rendered
   task_role_arn            = var.ecs_task_execution_role
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.checksum_check_name}-task-definition",      
-      "CreatedBy", "${var.username}"
-    )
-  )}"
+    map("Name", "${var.checksum_check_name}-task-definition")
+  )
 }

@@ -56,10 +56,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
     
     tags = merge(
         var.common_tags,
-        map(
-          "Name", var.tag_name,
-          "CreatedBy", var.username
-        )
+      map("Name", var.tag_name)
     )
  }
 
@@ -89,13 +86,10 @@ resource "aws_cognito_identity_pool_roles_attachment" "main" {
       name               = "${var.environment}_Cognito_TDRIdentityPoolUnauth_Role"     
       assume_role_policy = data.aws_iam_policy_document.unauthenticated_assume_role.json
 
-    tags = merge(
-        var.common_tags,
-        map(
-          "Name", var.tag_name,
-          "CreatedBy", var.username
-        )
-    )
+   tags = merge(
+    var.common_tags,
+    map("Name", var.tag_name)
+   )
  }
 
 /* Generate policies */

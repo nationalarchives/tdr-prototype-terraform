@@ -14,10 +14,6 @@ variable "tag_service" {
   default = "tdr-ecs"
 }
 
-variable "username" {
-  type    = string
-}
-
 variable "environment" {
   description = "Environment resource is running in"
   type        = string
@@ -58,6 +54,11 @@ variable "app_name" {
   description = "Name of the hosted application"
   type        = string
   default     = "tdr-checksum-check"
+}
+
+variable "container_name" {
+  description = "The name of the container for the ecs task"
+  default = "checksum-check-container"
 }
 
 variable "ecs_vpc" {
