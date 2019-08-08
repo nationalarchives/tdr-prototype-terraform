@@ -22,7 +22,7 @@ resource "aws_ecs_task_definition" "virus_check" {
   tags = merge(
     var.common_tags,
     map(
-      "Name", "${var.virus_check_name}-task-definition",
+      "Name", "${var.virus_check_name}-task-definition-${var.environment}",
     )
   )
 }

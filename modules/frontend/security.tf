@@ -20,7 +20,7 @@ resource "aws_security_group" "lb" {
 
   tags = merge(
     var.common_tags,
-    map("Name", "${var.app_name}-load-balancer-security-group")
+    map("Name", "${var.app_name}-load-balancer-security-group-${var.environment}")
   )
 }
 
@@ -46,6 +46,6 @@ resource "aws_security_group" "ecs_tasks" {
 
   tags = merge(
     var.common_tags,
-    map("Name", "${var.app_name}-ecs-task-security-group")
+    map("Name", "${var.app_name}-ecs-task-security-group-${var.environment}")
   )
 }
