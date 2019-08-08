@@ -56,3 +56,7 @@ variable "file_format_check_topic_arn" {
 variable "checksum_check_topic_arn" {
   description = "The SNS topic to send updates to once the step function completes the checksum check"
 }
+
+variable "account_id" {
+  description = "The account id of the user"
+}

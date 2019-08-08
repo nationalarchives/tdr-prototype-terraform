@@ -85,6 +85,7 @@ module "caller" {
 module "stepfunction" {
   source = "./modules/stepfunction"
   ecs_vpc = local.ecs_vpc
+  account_id = module.caller.account_id
   environment = local.environment
   cluster_arn = module.frontend.app_cluster_arn
   ecs_private_subnet = local.ecs_private_subnet

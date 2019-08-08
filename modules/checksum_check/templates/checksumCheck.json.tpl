@@ -1,6 +1,6 @@
 [
     {
-        "name": "tdr-checksum-check",
+        "name": "${container_name}",
         "image": "${checksum_check_image}:${app_environment}",
         "cpu": 0,
         "secrets": [
