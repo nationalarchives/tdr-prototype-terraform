@@ -4,8 +4,8 @@ locals {
 
 resource "aws_cloudfront_distribution" "web_distribution" {
   origin {
-    domain_name = "${aws_alb.main.dns_name}"
-    origin_id   = "${local.web_origin_id}"
+    domain_name = aws_alb.main.dns_name
+    origin_id   = local.web_origin_id
     custom_origin_config {
         http_port                = "80"
         https_port               = "443"
@@ -22,7 +22,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "${local.web_origin_id}"
+    target_origin_id = local.web_origin_id
 
     forwarded_values {
       query_string = true
@@ -50,11 +50,8 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     cloudfront_default_certificate = true
   }
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.app_name}-cdn",      
-      "CreatedBy", "${var.tag_created_by}"
-    )
-  )}"
+    map("Name", "${var.app_name}-cdn")
+  )
 }

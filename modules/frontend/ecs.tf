@@ -1,13 +1,10 @@
 resource "aws_ecs_cluster" "tdr-prototype-ecs" {
   name = "tdr-prototype-ecs-${var.environment}"
   
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.tag_name}",      
-      "CreatedBy", "${var.tag_created_by}"
-    )
-  )}"
+    map("Name", var.tag_name)
+  )
 }
 
  data "template_file" "app" {
@@ -24,7 +21,7 @@ resource "aws_ecs_cluster" "tdr-prototype-ecs" {
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = var.app_name
+  family                   = "${var.app_name}-${var.environment}"
   execution_role_arn       = var.ecs_task_execution_role
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -33,13 +30,10 @@ resource "aws_ecs_task_definition" "app" {
   container_definitions    = data.template_file.app.rendered
   task_role_arn            = var.ecs_task_execution_role
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.app_name}-task-definition",      
-      "CreatedBy", "${var.tag_created_by}"
-    )
-  )}"
+    map("Name", "${var.app_name}-task-definition")
+  )
 }
 
 resource "aws_ecs_service" "app" {
@@ -52,7 +46,7 @@ resource "aws_ecs_service" "app" {
 
   network_configuration {
     security_groups  = [aws_security_group.ecs_tasks.id]
-    subnets          = aws_subnet.private.*.id
+    subnets          = var.ecs_private_subnet
     assign_public_ip = false
   }
 

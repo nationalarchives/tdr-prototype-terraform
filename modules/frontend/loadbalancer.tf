@@ -1,22 +1,19 @@
 resource "aws_alb" "main" {
   name            = "tdr-app-load-balancer-${var.environment}"
-  subnets         = aws_subnet.public.*.id
+  subnets         = var.ecs_public_subnet
   security_groups = [aws_security_group.lb.id]
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.app_name}-loadbalancer",      
-      "CreatedBy", "${var.tag_created_by}"
-    )
-  )}"
+    map("Name", "${var.app_name}-loadbalancer")
+  )
 }
 
 resource "aws_alb_target_group" "app" {
   name        = "tdr-app-target-group-${var.environment}"
   port        = 9000
   protocol    = "HTTP"
-  vpc_id      = aws_vpc.main.id
+  vpc_id      = var.ecs_vpc
   target_type = "ip"
 
   health_check {
@@ -29,13 +26,10 @@ resource "aws_alb_target_group" "app" {
     unhealthy_threshold = "2"
   }
 
-  tags = "${merge(
+  tags = merge(
     var.common_tags,
-    map(
-      "Name", "${var.app_name}-target-group",      
-      "CreatedBy", "${var.tag_created_by}"
-    )
-  )}"
+    map("Name", "${var.app_name}-target-group")
+  )
 }
 
 # Redirect all traffic from the ALB to the target group
