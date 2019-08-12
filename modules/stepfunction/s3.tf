@@ -9,16 +9,24 @@ resource "aws_s3_bucket" "step-function-cloudtrail" {
     )
   )
 }
+
 // Upload files bucket. This won't stay here
 resource "aws_s3_bucket" "upload-files" {
   bucket = "tdr-upload-files-${var.environment}"
   acl    = "private"
 
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "POST", "GET", "HEAD"]
+    allowed_origins = ["*"]
+    expose_headers  = ["ETag"]
+  }
+
   tags = merge(
-  var.common_tags,
-  map(
-  "Name", "tdr-upload-files-${var.environment}",
-  )
+    var.common_tags,
+    map(
+      "Name", "tdr-upload-files-${var.environment}",
+    )
   )
 }
 
