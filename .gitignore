@@ -1,5 +1,11 @@
+.bundle
 .idea
 .terraform
+.kitchen
+vendor
+terraform.tfstate.d
 **.tfstate
 **.tfstate.backup
 *.tfvars
+
+

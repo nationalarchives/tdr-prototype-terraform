@@ -1,0 +1,22 @@
+---
+driver:
+  name: terraform
+  root_module_directory: test/fixtures/network
+  parallelism: 4
+
+provisioner:
+  name: terraform
+
+verifier:
+  name: "terraform"
+  format: doc
+  groups:
+    - name: default
+      controls:
+        - test_network
+  
+platforms:
+  - name: "aws"
+
+suites:
+  - name: default
