@@ -1,8 +1,7 @@
-# Test VPC resource
-require 'aws-sdk'
+# frozen_string_literal: true
 
-describe vpc() do 
-    it { should exist }
-    it { should be_available }
-    it { should have_tag('Name').value("XXXX") }     
+control 'test_network' do
+    describe command('lsb_release -a') do 
+        its('stdout') { should match (/Ubuntu/) }             
+    end
 end

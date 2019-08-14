@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
-source 'https://rubygems.org/' do  
+ruby '2.6.3'
+
+source 'https://rubygems.org/' do
+  gem 'awspec'  
   gem 'test-kitchen' 
-  gem 'kitchen-terraform', '~> 4.0'
-  gem 'rhcl', '~> 0.1.0' # ruby hcl parser  
+  gem 'kitchen-terraform'
+  gem 'kitchen-verifier-awspec'
+  gem 'rhcl', '~> 0.1.0' # ruby hcl parser 
 end

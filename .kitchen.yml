@@ -1,22 +1,25 @@
 ---
 driver:
   name: terraform
-  root_module_directory: test/fixtures/network
-  parallelism: 4
 
 provisioner:
   name: terraform
+      
+platforms:
+  - name: "aws"
+
+transport:
+  name: ssh
+  ssh_key: ~/.aws/credentials/key.pem
 
 verifier:
-  name: "terraform"
+  name: terraform
   format: doc
   groups:
     - name: default
       controls:
         - test_network
-  
-platforms:
-  - name: "aws"
-
+      vpcname: ecs_vpc
+      
 suites:
   - name: default
