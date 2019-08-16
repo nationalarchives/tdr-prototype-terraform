@@ -16,10 +16,18 @@ resource "aws_sns_topic" "file_format_check_result" {
   }
 }
 EOF
-  tags = merge(
+  
+tags = merge(
   var.common_tags,
-  map(
-  "Name", "file-format-check-result-topic-${var.environment}",
+    map(
+      "Name", "file-format-check-result-topic-${var.environment}",
+    )
   )
-  )
+}
+
+resource "aws_sns_topic_subscription" "send_file_format_result" {
+  topic_arn = aws_sns_topic.file_format_check_result.arn
+  protocol = "lambda"
+  #Temp endpoint to set up subscription. Needs to be correct endpoint
+  endpoint = "arn:aws:lambda:eu-west-2:247222723249:function:send-result-to-graphql"  
 }
