@@ -4,7 +4,6 @@ locals {
   tag_prefix = module.global_variables.tag_prefix
   aws_region = module.global_variables.default_aws_region
   common_tags = map(
-  "CreatedBy", module.caller.caller_arn,
   "Environment", local.environment,
   "Owner", "TDR",
   "Terraform", true
