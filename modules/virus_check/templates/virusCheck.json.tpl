@@ -15,6 +15,10 @@
             {
                 "valueFrom": "/${app_environment}/DEFAULT_REGION",
                 "name": "AWS_DEFAULT_REGION"
+            },
+            {
+                "valueFrom": "/${app_environment}/S3_UPLOAD_BUCKET",
+                "name": "S3_UPLOAD_BUCKET"
             }
         ],        
         "networkMode": "awsvpc",

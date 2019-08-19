@@ -1,6 +1,6 @@
 locals {
   #Ensure that developers' workspaces always default to 'dev'
-  environment = lookup(var.workspace_to_environment_map, terraform.workspace, "test")
+  environment = lookup(var.workspace_to_environment_map, terraform.workspace, "dev")
   tag_prefix = module.global_variables.tag_prefix
   aws_region = module.global_variables.default_aws_region
   common_tags = map(
@@ -75,6 +75,7 @@ module "checksum_check" {
 module "ecs_network" {
   source = "./modules/network"
   common_tags = local.common_tags
+  environment = local.environment
   app_name = "ecs"
 }
 
