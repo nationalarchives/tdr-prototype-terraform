@@ -100,3 +100,12 @@ module "stepfunction" {
   checksum_check_topic_arn = module.checksum_check.checksum_topic_arn
   common_tags = local.common_tags
 }
+
+module "api" {
+  source = "./modules/api"
+  common_tags = local.common_tags
+  environment = local.environment
+  vpc_id = local.ecs_vpc
+  private_subnet = local.ecs_private_subnet
+  database_password = "${var.database_password}"
+}
