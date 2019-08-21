@@ -1,14 +1,11 @@
 resource "aws_rds_cluster" "content_database" {
-
   cluster_identifier_prefix = "content-db-${var.environment}"
   engine                    = "aurora-postgresql"
-  # TODO: Move to variable?
-  availability_zones        = ["eu-west-2a", "eu-west-2b"]
+  availability_zones        = var.database_availability_zones
   database_name             = "tdrapi"
   master_username           = "tdr_db_user"
   master_password           = var.database_password
-  # TODO: Should be false, at least in Beta? Needs a final_snapshot_identifier if so
-  skip_final_snapshot       = true
+  final_snapshot_identifier = "content-db-final-snapshot-${var.environment}"
   vpc_security_group_ids    = [aws_security_group.content_database.id]
   db_subnet_group_name      = aws_db_subnet_group.content_database.name
 
@@ -39,19 +36,19 @@ resource "aws_rds_cluster_instance" "content_database" {
 }
 
 resource "aws_ssm_parameter" "database_url" {
-  name  = "/tdr/${var.environment}/api/db/url"
+  name  = local.database_parameter_keys["url"]
   type  = "String"
   value = "jdbc:postgresql://${aws_rds_cluster.content_database.endpoint}:${aws_rds_cluster.content_database.port}/${aws_rds_cluster.content_database.database_name}"
 }
 
 resource "aws_ssm_parameter" "database_username" {
-  name  = "/tdr/${var.environment}/api/db/username"
+  name  = local.database_parameter_keys["username"]
   type  = "String"
   value = aws_rds_cluster.content_database.master_username
 }
 
 resource "aws_ssm_parameter" "database_password" {
-  name  = "/tdr/${var.environment}/api/db/password"
+  name  = local.database_parameter_keys["password"]
   type  = "String"
   value = var.database_password
 }

@@ -43,6 +43,15 @@ resource "aws_security_group_rule" "allow_incoming_db_requests" {
   source_security_group_id = aws_security_group.api_lambda.id
 }
 
+resource "aws_security_group_rule" "allow_db_requests_from_migration_task" {
+  type                     = "ingress"
+  from_port                = local.db_port
+  to_port                  = local.db_port
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.content_database.id
+  source_security_group_id = aws_security_group.database_migration_task.id
+}
+
 resource "aws_security_group_rule" "allow_lambda_to_call_db" {
   type                     = "egress"
   from_port                = local.db_port
@@ -61,4 +70,24 @@ resource "aws_security_group_rule" "allow_lambda_to_call_ssm" {
   cidr_blocks      = ["0.0.0.0/0"]
   ipv6_cidr_blocks = ["::/0"]
   security_group_id = aws_security_group.api_lambda.id
+}
+
+resource "aws_security_group_rule" "allow_migrations_to_call_db" {
+  type                     = "egress"
+  from_port                = local.db_port
+  to_port                  = local.db_port
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.database_migration_task.id
+  source_security_group_id = aws_security_group.content_database.id
+}
+
+resource "aws_security_group_rule" "allow_migrations_to_pull_docker_image" {
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  # TODO: Can we limit this to just Docker?
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  security_group_id = aws_security_group.database_migration_task.id
 }

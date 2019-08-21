@@ -17,7 +17,20 @@ variable "private_subnet" {
   type = list(string)
 }
 
+variable "aws_region" {
+  type = string
+}
+
+variable "database_availability_zones" {
+  type = list(string)
+}
+
 variable "database_password" {
   type        = string
   description = "Password for the RDS database user"
+}
+
+variable "api_parameter_base_path" {
+  type        = string
+  description = "Prefix for SSM parameters used by the API"
 }
