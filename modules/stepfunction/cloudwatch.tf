@@ -73,7 +73,7 @@ resource "aws_iam_role" "invoke_step_function" {
  }
 
  /* Attach policies to IAM role */
-resource "aws_iam_role_policy_attachment" "invoke_step_fucntion_attach" {
+resource "aws_iam_role_policy_attachment" "invoke_step_function_attach" {
   role       = aws_iam_role.invoke_step_function.name
   policy_arn = aws_iam_policy.invoke_step_function_Role.arn
 }
