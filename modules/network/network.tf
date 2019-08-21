@@ -4,7 +4,7 @@ data "aws_availability_zones" "available" {
 
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
-  
+
   tags = merge(
     var.common_tags,
     map("Name", "${var.app_name}-vpc-${var.environment}")
@@ -55,6 +55,10 @@ resource "aws_eip" "gw" {
   count      = var.az_count
   vpc        = true
   depends_on = [aws_internet_gateway.gw]
+
+  tags = merge(
+    var.common_tags
+  )
 }
 
 resource "aws_nat_gateway" "gw" {

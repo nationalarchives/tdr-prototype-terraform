@@ -100,32 +100,3 @@ module "stepfunction" {
   checksum_check_topic_arn = module.checksum_check.checksum_topic_arn
   common_tags = local.common_tags
 }
-
-/* module "security" {
-  source = "./modules/security"
-  app_port = module.ecs.app_port
-}
-
-module "cognito" {
-  source = "./modules/cognito"
-
-  cognito_user_pool = "${local.tag_prefix}-${local.environment}"
-  tag_name          = "${local.tag_prefix}-authentication-${local.environment}-userpool1"
-  environment       = local.environment
-}
-
-module "vpc" {
-  source = "./modules/vpc"
-
-  vpc_name = "${local.tag_prefix}-${local.environment}-vpc1"
-  cidr     = "10.0.0.0/17"
-  tag_name = "${local.tag_prefix}-cloud-${local.environment}-vpc1"
-}
-
-module "stepfunction" {
-  source = "./modules/stepfunction"
-
-  step_function_name = "${local.tag_prefix}-${local.environment}-stepfunc1"
-  tag_name           = "${local.tag_prefix}-stepfunc-${local.environment}-sf"
-  vpc_id             = module.vpc.vpc_id
-} */
