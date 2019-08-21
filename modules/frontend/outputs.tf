@@ -6,8 +6,8 @@ output "alb_hostname" {
   value = aws_alb.main.dns_name
 }
 
-output "user_pool_id" {
-  value = aws_cognito_user_pool.pool.id
+output "user_pool_arn" {
+  value = aws_cognito_user_pool.pool.arn
 }
 
 output "app_client_authenticate_id" {

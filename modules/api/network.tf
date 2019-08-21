@@ -34,7 +34,18 @@ resource "aws_security_group" "api_lambda" {
   )
 }
 
-resource "aws_security_group_rule" "allow_incoming_db_requests" {
+resource "aws_security_group" "database_migration_task" {
+  name        = "migration-task-security-group-${var.environment}"
+  description = "Allow access to database"
+  vpc_id      = var.vpc_id
+
+  tags = merge(
+    var.common_tags,
+    map("Name", "migration-task-security-group-${var.environment}")
+  )
+}
+
+resource "aws_security_group_rule" "allow_db_requests_from_api" {
   type                     = "ingress"
   from_port                = local.db_port
   to_port                  = local.db_port

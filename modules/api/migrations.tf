@@ -28,8 +28,7 @@ data "template_file" "database_migrations" {
  template = file("modules/api/templates/databaseMigrations.json.tpl")
 
  vars = {
-   # TODO: Use environment tag
-   image_id = "nationalarchives/tdr-prototype-db-migrations:latest"
+   image_id = "nationalarchives/tdr-prototype-db-migrations:${var.environment}"
    app_environment   = var.environment
    aws_region        = var.aws_region
    container_name    = "content-database-migrations-${var.environment}"

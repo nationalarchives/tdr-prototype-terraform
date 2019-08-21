@@ -25,6 +25,15 @@ variable "database_availability_zones" {
   type = list(string)
 }
 
+variable "account_id" {
+  description = "The account id of the user"
+}
+
+variable "user_pool_arn" {
+  type        = string
+  description = "The ARN of the Cognito user pool used to authenticate TDR users"
+}
+
 variable "database_password" {
   type        = string
   description = "Password for the RDS database user"

@@ -111,6 +111,8 @@ module "api" {
   private_subnet = local.ecs_private_subnet
   aws_region = local.aws_region
   database_availability_zones = local.availability_zones
+  account_id = module.caller.account_id
+  user_pool_arn = module.frontend.user_pool_arn
   database_password = "${var.database_password}"
   api_parameter_base_path = "${local.parameter_base_path}/api"
 }
