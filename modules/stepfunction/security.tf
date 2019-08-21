@@ -1,4 +1,3 @@
-# Traffic to the ECS cluster should only come from the application load balancer
 resource "aws_security_group" "ecs_tasks" {
   name        = "${var.environment}-ecs-tasks-security-group"
   description = "Allow outbound access only"
