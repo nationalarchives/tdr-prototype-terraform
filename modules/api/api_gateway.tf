@@ -12,6 +12,25 @@ resource "aws_api_gateway_rest_api" "graphql_api" {
   }
 }
 
+resource "aws_api_gateway_deployment" "graphql_api" {
+  rest_api_id = aws_api_gateway_rest_api.graphql_api.id
+  depends_on  = ["aws_api_gateway_integration.graphql_api"]
+
+  # You must update the version if you make any changes that require a
+  # redeployment of the API Gateway.
+  # Terraform doesn't provide a good way to automatically redeploy the Gateway,
+  # but we could look into less manual workarounds, e.g.:
+  # https://github.com/terraform-providers/terraform-provider-aws/issues/162
+  # https://medium.com/coryodaniel/til-forcing-terraform-to-deploy-a-aws-api-gateway-deployment-ed36a9f60c1a
+  variables = {
+    version = 5
+  }
+
+  lifecycle {
+      create_before_destroy = true
+  }
+}
+
 resource "aws_api_gateway_method" "graphql_api" {
   rest_api_id   = aws_api_gateway_rest_api.graphql_api.id
   resource_id   = aws_api_gateway_resource.graphql_endpoint.id
@@ -25,6 +44,9 @@ resource "aws_api_gateway_method_response" "graphql_api_response_200" {
   resource_id = aws_api_gateway_resource.graphql_endpoint.id
   http_method = aws_api_gateway_method.graphql_api.http_method
   status_code = "200"
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
 }
 
 resource "aws_api_gateway_integration" "graphql_api" {
@@ -37,10 +59,60 @@ resource "aws_api_gateway_integration" "graphql_api" {
 }
 
 resource "aws_api_gateway_integration_response" "graphql_api" {
-  rest_api_id = aws_api_gateway_rest_api.graphql_api.id
-  resource_id = aws_api_gateway_resource.graphql_endpoint.id
-  http_method = aws_api_gateway_integration.graphql_api.http_method
-  status_code = aws_api_gateway_method_response.graphql_api_response_200.status_code
+  rest_api_id         = aws_api_gateway_rest_api.graphql_api.id
+  resource_id         = aws_api_gateway_resource.graphql_endpoint.id
+  http_method         = aws_api_gateway_integration.graphql_api.http_method
+  status_code         = aws_api_gateway_method_response.graphql_api_response_200.status_code
+  response_parameters = {
+    // TODO: Lock down to TDR frontend once we have a domain
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
+}
+
+resource "aws_api_gateway_method" "graphql_options" {
+  rest_api_id   = aws_api_gateway_rest_api.graphql_api.id
+  resource_id   = aws_api_gateway_resource.graphql_endpoint.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_method_response" "graphql_options_response_200" {
+  rest_api_id         = aws_api_gateway_rest_api.graphql_api.id
+  resource_id         = aws_api_gateway_resource.graphql_endpoint.id
+  http_method         = aws_api_gateway_method.graphql_options.http_method
+  status_code         = "200"
+  response_models     = {
+    "application/json" = "Empty"
+  }
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "graphql_options" {
+  rest_api_id           = aws_api_gateway_rest_api.graphql_api.id
+  resource_id           = aws_api_gateway_resource.graphql_endpoint.id
+  http_method           = aws_api_gateway_method.graphql_options.http_method
+  type                  = "MOCK"
+  passthrough_behavior = "WHEN_NO_MATCH"
+  request_templates     = {
+    "application/json" = "{ 'statusCode': 200 }"
+  }
+}
+
+resource "aws_api_gateway_integration_response" "graphql_options" {
+  rest_api_id         = aws_api_gateway_rest_api.graphql_api.id
+  resource_id         = aws_api_gateway_resource.graphql_endpoint.id
+  http_method         = aws_api_gateway_integration.graphql_options.http_method
+  status_code         = aws_api_gateway_method_response.graphql_options_response_200.status_code
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT'",
+    # TODO: Lock down to TDR frontend once we have a domain
+    "method.response.header.Access-Control-Allow-Origin" = "'*'"
+  }
 }
 
 resource "aws_api_gateway_stage" "graphql_api_deployed_stage" {
@@ -49,25 +121,6 @@ resource "aws_api_gateway_stage" "graphql_api_deployed_stage" {
   deployment_id = aws_api_gateway_deployment.graphql_api.id
 
   tags = var.common_tags
-}
-
-resource "aws_api_gateway_deployment" "graphql_api" {
-  rest_api_id = aws_api_gateway_rest_api.graphql_api.id
-  depends_on  = ["aws_api_gateway_integration.graphql_api"]
-
-  # You must update the version if you make any changes that require a
-  # redeployment of the API Gateway.
-  # Terraform doesn't provide a good way to automatically redeploy the Gateway,
-  # but we could look into less manual workarounds, e.g.:
-  # https://github.com/terraform-providers/terraform-provider-aws/issues/162
-  # https://medium.com/coryodaniel/til-forcing-terraform-to-deploy-a-aws-api-gateway-deployment-ed36a9f60c1a
-  variables = {
-    version = 3
-  }
-
-  lifecycle {
-      create_before_destroy = true
-  }
 }
 
 resource "aws_lambda_permission" "graphql_api" {
