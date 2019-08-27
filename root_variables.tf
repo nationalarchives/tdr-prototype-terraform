@@ -8,3 +8,7 @@ variable "workspace_to_environment_map" {
     prod = "prod"
   }
 }
+
+variable "database_password" {
+  type = "string"
+}

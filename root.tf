@@ -3,6 +3,7 @@ locals {
   environment = lookup(var.workspace_to_environment_map, terraform.workspace, "dev")
   tag_prefix = module.global_variables.tag_prefix
   aws_region = module.global_variables.default_aws_region
+  availability_zones = module.global_variables.default_availability_zones
   common_tags = map(
   "Environment", local.environment,
   "Owner", "TDR",
@@ -11,6 +12,7 @@ locals {
   ecs_vpc = module.ecs_network.ecs_vpc
   ecs_public_subnet = module.ecs_network.ecs_public_subnet
   ecs_private_subnet = module.ecs_network.ecs_private_subnet
+  parameter_base_path = "/tdr/${local.environment}"
 }
 
 terraform {
@@ -99,4 +101,18 @@ module "stepfunction" {
   file_format_check_topic_arn = module.file_format_check.file_format_topic_arn
   checksum_check_topic_arn = module.checksum_check.checksum_topic_arn
   common_tags = local.common_tags
+}
+
+module "api" {
+  source = "./modules/api"
+  common_tags = local.common_tags
+  environment = local.environment
+  vpc_id = local.ecs_vpc
+  private_subnet = local.ecs_private_subnet
+  aws_region = local.aws_region
+  database_availability_zones = local.availability_zones
+  account_id = module.caller.account_id
+  user_pool_arn = module.frontend.user_pool_arn
+  database_password = "${var.database_password}"
+  api_parameter_base_path = "${local.parameter_base_path}/api"
 }
