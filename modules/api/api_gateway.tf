@@ -16,11 +16,12 @@ resource "aws_api_gateway_deployment" "graphql_api" {
     # Gateway, but we could look into less manual workarounds, e.g.:
     # https://github.com/terraform-providers/terraform-provider-aws/issues/162
     # https://medium.com/coryodaniel/til-forcing-terraform-to-deploy-a-aws-api-gateway-deployment-ed36a9f60c1a
-    version      = 7
+    version = 9
+
     # Force this resource to depend on the API Gateway integrations. We cannot
     # use 'depends_on' because 'depends_on' does not work with resources inside
     # modules. See: https://github.com/hashicorp/terraform/issues/17101
-    dependencies = "${module.graphql_frontend_endpoint.integration_id}"
+    dependencies = "${module.graphql_frontend_endpoint.integration_id}, ${module.graphql_file_checker_endpoint.integration_id}"
   }
 
   lifecycle {
@@ -51,6 +52,20 @@ module "graphql_frontend_endpoint" {
   parent_resource_id = aws_api_gateway_rest_api.graphql_api.root_resource_id
   authorization_type = "COGNITO_USER_POOLS"
   authorizer_id      = aws_api_gateway_authorizer.graphql_api_auth.id
+  lambda_arn         = aws_lambda_function.api.arn
+  lambda_name        = aws_lambda_function.api.function_name
+  aws_region         = var.aws_region
+  environment        = var.environment
+  account_id         = var.account_id
+}
+
+module "graphql_file_checker_endpoint" {
+  source = "../graphql_api_endpoint"
+
+  relative_path      = "graphql-backend"
+  rest_api_id        = aws_api_gateway_rest_api.graphql_api.id
+  parent_resource_id = aws_api_gateway_rest_api.graphql_api.root_resource_id
+  authorization_type = "AWS_IAM"
   lambda_arn         = aws_lambda_function.api.arn
   lambda_name        = aws_lambda_function.api.function_name
   aws_region         = var.aws_region
