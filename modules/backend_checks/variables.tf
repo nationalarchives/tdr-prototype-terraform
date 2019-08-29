@@ -40,12 +40,11 @@ variable "fargate_memory" {
   default     = "2048"
 }
 
-variable "checksum_check_image" {
+variable "image" {
   description = "The docker image to run file format checks against the files"
-  default = "nationalarchives/tdr-checksum-check"
 }
 
-variable "checksum_check_name" {
+variable "task_name" {
   description = "The name of the file format check task"
   default = "tdr-checksum-check"
 }
@@ -61,6 +60,18 @@ variable "container_name" {
   default = "checksum-check-container"
 }
 
-variable "ecs_vpc" {
-  description = "The vpc for the task"
+variable "graphql_invoke_url" {
+  description = "The url for the graphql server"
 }
+
+variable "graphql_path" {
+  description = "The graphql path"
+}
+
+variable "account_id" {}
+
+variable "api_id" {}
+
+variable "api_stage" {}
+
+variable "check_name" {}

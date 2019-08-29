@@ -45,32 +45,55 @@ module "frontend" {
   ecs_public_subnet = local.ecs_public_subnet
 }
 
-module "virus_check" {
-  source = "./modules/virus_check"
+module "backend_virus_check" {
+  source = "./modules/backend_checks"
 
   environment = local.environment
   aws_region = local.aws_region
   tag_name = "${local.tag_prefix}-ecs-virus-check-${local.environment}"
   common_tags = local.common_tags
+  graphql_invoke_url = module.api.graphql_api_url
+  graphql_path = module.api.graphql_path
+  api_id = module.api.graphql_stage_id
+  api_stage = module.api.graphql_stage_name
+  account_id = module.caller.account_id
+  check_name = "virus"
+  image = "nationalarchives/tdr-virus-check"
+
 }
 
-module "file_format_check" {
-  source = "./modules/file_format_check"
-
-  environment = local.environment
-  aws_region = local.aws_region
-  tag_name = "${local.tag_prefix}-ecs-file-format-check-${local.environment}"
-  common_tags = local.common_tags
-}
-
-module "checksum_check" {
-  source = "./modules/checksum_check"
+module "backend_checksum_check" {
+  source = "./modules/backend_checks"
 
   environment = local.environment
   aws_region = local.aws_region
   tag_name = "${local.tag_prefix}-ecs-checksum-check-${local.environment}"
   common_tags = local.common_tags
-  ecs_vpc = local.ecs_vpc
+  graphql_invoke_url = module.api.graphql_api_url
+  graphql_path = module.api.graphql_path
+  api_id = module.api.graphql_stage_id
+  api_stage = module.api.graphql_stage_name
+  account_id = module.caller.account_id
+  check_name = "checksum"
+  image = "nationalarchives/tdr-checksum-check"
+
+}
+
+module "backend_file_format_check" {
+  source = "./modules/backend_checks"
+
+  environment = local.environment
+  aws_region = local.aws_region
+  tag_name = "${local.tag_prefix}-ecs-fileformat-check-${local.environment}"
+  common_tags = local.common_tags
+  graphql_invoke_url = module.api.graphql_api_url
+  graphql_path = module.api.graphql_path
+  api_id = module.api.graphql_stage_id
+  api_stage = module.api.graphql_stage_name
+  account_id = module.caller.account_id
+  check_name = "fileformat"
+  image = "nationalarchives/tdr-file-format-check"
+
 }
 
 module "ecs_network" {
@@ -91,15 +114,15 @@ module "stepfunction" {
   environment = local.environment
   cluster_arn = module.frontend.app_cluster_arn
   ecs_private_subnet = local.ecs_private_subnet
-  virus_check_task_arn = module.virus_check.virus_check_task_arn
-  virus_check_container_name = module.virus_check.virus_check_container_name
-  file_format_check_task_arn = module.file_format_check.file_format_check_task_arn
-  file_format_check_container_name = module.file_format_check.file_format_check_container_name
-  checksum_check_task_arn = module.checksum_check.checksum_check_task_arn
-  checksum_check_container_name = module.checksum_check.checksum_check_container_name
-  virus_check_topic_arn = module.virus_check.virus_check_topic_arn
-  file_format_check_topic_arn = module.file_format_check.file_format_topic_arn
-  checksum_check_topic_arn = module.checksum_check.checksum_topic_arn
+  virus_check_task_arn = module.backend_virus_check.backend_check_task_arn
+  virus_check_container_name = module.backend_virus_check.container_name
+  file_format_check_task_arn = module.backend_file_format_check.backend_check_task_arn
+  file_format_check_container_name = module.backend_file_format_check.container_name
+  checksum_check_task_arn = module.backend_checksum_check.backend_check_task_arn
+  checksum_check_container_name = module.backend_checksum_check.container_name
+  virus_check_topic_arn = module.backend_virus_check.topic_arn
+  file_format_check_topic_arn = module.backend_file_format_check.topic_arn
+  checksum_check_topic_arn = module.backend_checksum_check.topic_arn
   common_tags = local.common_tags
 }
 
@@ -113,6 +136,6 @@ module "api" {
   database_availability_zones = local.availability_zones
   account_id = module.caller.account_id
   user_pool_arn = module.frontend.user_pool_arn
-  database_password = "${var.database_password}"
+  database_password = var.database_password
   api_parameter_base_path = "${local.parameter_base_path}/api"
 }

@@ -1,7 +1,7 @@
 [
     {
         "name": "${container_name}",
-        "image": "${virus_check_image}:${app_environment}",
+        "image": "${image}:${app_environment}",
         "cpu": 0,
         "secrets": [
             {
@@ -25,7 +25,7 @@
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
-                "awslogs-group": "/ecs/tdr-virus-check-${app_environment}",
+                "awslogs-group": "/ecs/tdr-${check_name}-check-${app_environment}",
                 "awslogs-region": "${aws_region}",
                 "awslogs-stream-prefix": "ecs"
             }
