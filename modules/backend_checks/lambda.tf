@@ -26,7 +26,6 @@ resource "aws_lambda_function" "backend_check_lambda" {
 resource "aws_iam_role" "backend_check_lambda_role" {
   name = "${var.check_name}_lambda_role_${var.environment}"
   assume_role_policy = data.aws_iam_policy_document.invoke_graphql_api_assume_role.json
-
   tags = merge(
   var.common_tags,
   map(
@@ -45,6 +44,14 @@ data "aws_iam_policy_document" "invoke_graphql_api_assume_role" {
       identifiers = ["lambda.amazonaws.com"]
     }
   }
+}
+
+resource "aws_lambda_permission" "with_sns" {
+  statement_id = "AllowExecutionFromSNS"
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.backend_check_lambda.arn
+  principal = "sns.amazonaws.com"
+  source_arn = aws_sns_topic.backend_check_result.arn
 }
 
 resource "aws_iam_policy" "invoke_backend_check_api_gateway_role" {
@@ -71,23 +78,23 @@ data "aws_iam_policy_document" "lambda_policy" {
 
   statement {
     actions = [
+      "logs:CreateLogGroup"
+    ]
+
+    resources = [
+      "arn:aws:logs:${var.aws_region}:${var.account_id}:*"
+    ]
+  }
+
+  statement {
+    actions = [
+      "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
 
     resources = [
-      aws_cloudwatch_log_stream.tdr_application_log_stream.arn
+      "arn:aws:logs:*:*:log-group:*:*:*"
     ]
   }
 
-}
-
-# Set up CloudWatch group and log stream and retain logs for 30 days
-resource "aws_cloudwatch_log_group" "tdr_backend_check_lambda_log_group" {
-  name              = "/lambda/${var.check_name}-check-${var.environment}"
-  retention_in_days = 30
-}
-
-resource "aws_cloudwatch_log_stream" "tdr_backend_check_lambda_log_stream" {
-  name           = "/ecs/${var.check_name}-check-${var.environment}"
-  log_group_name = aws_cloudwatch_log_group.tdr_backend_check_lambda_log_group.name
 }
