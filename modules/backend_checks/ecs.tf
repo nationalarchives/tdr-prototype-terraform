@@ -1,16 +1,17 @@
  data "template_file" "checksum_check" {
-  template = file("modules/checksum_check/templates/checksumCheck.json.tpl")
+  template = file("modules/backend_checks/templates/backendCheck.json.tpl")
 
   vars = {
-    checksum_check_image = var.checksum_check_image
+    image = var.image
     app_environment = var.environment
     aws_region      = var.aws_region
     container_name = "${var.container_name}-${var.environment}"
+    check_name = var.check_name
   }
 }
 
 resource "aws_ecs_task_definition" "checksum_check" {
-  family                   = "${var.checksum_check_name}-${var.environment}"
+  family                   = "${var.task_name}-${var.environment}"
   execution_role_arn       = var.ecs_task_execution_role
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -21,6 +22,6 @@ resource "aws_ecs_task_definition" "checksum_check" {
 
   tags = merge(
     var.common_tags,
-    map("Name", "${var.checksum_check_name}-task-definition")
+    map("Name", "${var.task_name}-task-definition")
   )
 }

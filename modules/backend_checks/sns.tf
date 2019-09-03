@@ -1,5 +1,5 @@
-resource "aws_sns_topic" "checksum_check_result" {
-  name = "checksum-check-result-${var.environment}"
+resource "aws_sns_topic" "backend_check_result" {
+  name = "${var.check_name}-check-result-${var.environment}"
   delivery_policy = <<EOF
 {
   "http": {
@@ -20,14 +20,14 @@ EOF
   tags = merge(
   var.common_tags,
   map(
-  "Name", "checksum-check-result-topic-${var.environment}",
+  "Name", "${var.check_name}-check-result-topic-${var.environment}",
   )
   )
 }
 
-resource "aws_sns_topic_subscription" "send_checksum_result" {
-  topic_arn = aws_sns_topic.checksum_check_result.arn
+resource "aws_sns_topic_subscription" "send_result" {
+  topic_arn = aws_sns_topic.backend_check_result.arn
   protocol = "lambda"
   #Temp endpoint to set up subscription. Needs to be correct endpoint
-  endpoint = "arn:aws:lambda:eu-west-2:247222723249:function:send-result-to-graphql"  
+  endpoint = aws_lambda_function.backend_check_lambda.arn
 }
