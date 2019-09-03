@@ -3,10 +3,8 @@ resource "aws_lambda_function" "backend_check_lambda" {
   runtime = "java8"
   handler = "uk.gov.nationalarchives.tdr.${var.check_name}.RequestHandler::handleRequest"
   role = aws_iam_role.backend_check_lambda_role.arn
-  timeout = 30
-  # seconds
-  memory_size = 512
-  # MB
+  timeout = 30 # seconds
+  memory_size = 512 # MB
   filename      = "./modules/api/api_lambda_placeholder.zip"
   environment {
     variables = {

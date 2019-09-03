@@ -7,7 +7,7 @@ output "graphql_stage_name" {
 }
 
 output "graphql_path" {
-  value = module.graphql_file_checker_endpoint.relative_path
+  value = module.graphql_file_checker_endpoint.path
 }
 
 output "graphql_stage_id" {
