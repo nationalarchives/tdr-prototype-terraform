@@ -67,6 +67,14 @@
             {
                 "valueFrom": "/${app_environment}/APOLLO_CLIENT_URI",
                 "name": "APOLLO_CLIENT_URI"
+            },
+            {
+                "valueFrom": "/${app_environment}/TDR_USER_POOL_ID",
+                "name": "TDR_USER_POOL_ID"
+            },
+            {
+                "valueFrom": "/${app_environment}/S3_UPLOAD_BUCKET",
+                "name": "S3_UPLOAD_BUCKET"
             }
         ],        
         "networkMode": "awsvpc",
