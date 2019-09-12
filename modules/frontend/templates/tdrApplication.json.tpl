@@ -63,6 +63,10 @@
             {
                 "valueFrom": "/${app_environment}/TDR_AUTH_PATH",
                 "name": "TDR_AUTH_PATH"
+            },
+            {
+                "valueFrom": "/${app_environment}/APOLLO_CLIENT_URI",
+                "name": "APOLLO_CLIENT_URI"
             }
         ],        
         "networkMode": "awsvpc",
