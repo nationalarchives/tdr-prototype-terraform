@@ -12,11 +12,6 @@ variable "vpc_id" {
   description = "The VPC for the API and DB"
 }
 
-variable "private_subnet" {
-  description = "The private subnet for the database to run in"
-  type = list(string)
-}
-
 variable "aws_region" {
   type = string
 }

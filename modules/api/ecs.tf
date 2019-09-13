@@ -65,7 +65,6 @@ resource "aws_ecs_service" "app" {
     container_name   = var.app_name
     container_port   = var.app_port
   }
-  depends_on = [aws_alb_listener.graphql, aws_alb_listener.graphql_tls]
 }
 
 # Traffic to the ECS cluster should only come from the application load balancer

@@ -4,7 +4,7 @@ locals {
 
 resource "aws_db_subnet_group" "content_database" {
   name = "content-db-subnet-group-${var.environment}"
-  subnet_ids = var.private_subnet
+  subnet_ids = var.ecs_private_subnet
 
   tags = merge(
     var.common_tags,
@@ -45,15 +45,6 @@ resource "aws_security_group" "database_migration_task" {
   )
 }
 
-resource "aws_security_group_rule" "allow_db_requests_from_api" {
-  type                     = "ingress"
-  from_port                = local.db_port
-  to_port                  = local.db_port
-  protocol                 = "tcp"
-  security_group_id        = aws_security_group.content_database.id
-  source_security_group_id = aws_security_group.api_lambda.id
-}
-
 resource "aws_security_group_rule" "allow_db_requests_from_migration_task" {
   type                     = "ingress"
   from_port                = local.db_port
@@ -63,13 +54,13 @@ resource "aws_security_group_rule" "allow_db_requests_from_migration_task" {
   source_security_group_id = aws_security_group.database_migration_task.id
 }
 
-resource "aws_security_group_rule" "allow_lambda_to_call_db" {
+resource "aws_security_group_rule" "allow_ecs_task_to_call_db" {
   type                     = "egress"
   from_port                = local.db_port
   to_port                  = local.db_port
   protocol                 = "tcp"
-  security_group_id        = aws_security_group.api_lambda.id
-  source_security_group_id = aws_security_group.content_database.id
+  security_group_id        = aws_security_group.content_database.id
+  source_security_group_id = aws_security_group.ecs_tasks.id
 }
 
 resource "aws_security_group_rule" "allow_lambda_to_call_ssm" {

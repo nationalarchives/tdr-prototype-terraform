@@ -23,10 +23,6 @@ resource "aws_api_gateway_deployment" "graphql_api" {
     # modules. See: https://github.com/hashicorp/terraform/issues/17101
     dependencies = "${module.graphql_frontend_endpoint.integration_id}, ${module.graphql_file_checker_endpoint.integration_id}"
   }
-
-  lifecycle {
-      create_before_destroy = true
-  }
 }
 
 resource "aws_api_gateway_stage" "graphql_api_deployed_stage" {

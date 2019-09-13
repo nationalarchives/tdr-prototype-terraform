@@ -10,8 +10,6 @@ locals {
   "Terraform", true
   )
   ecs_vpc = module.ecs_network.ecs_vpc
-  ecs_public_subnet = module.ecs_network.ecs_public_subnet
-  ecs_private_subnet = module.ecs_network.ecs_private_subnet
   parameter_base_path = "/tdr/${local.environment}"
 }
 
@@ -41,8 +39,8 @@ module "frontend" {
   tag_name = "${local.tag_prefix}-ecs-${local.environment}"
   common_tags = local.common_tags
   ecs_vpc = local.ecs_vpc
-  ecs_private_subnet = local.ecs_private_subnet
-  ecs_public_subnet = local.ecs_public_subnet
+  ecs_private_subnet = module.ecs_network.ecs_private_subnet
+  ecs_public_subnet = module.ecs_network.ecs_public_subnet
 }
 
 module "backend_virus_check" {
@@ -113,7 +111,7 @@ module "stepfunction" {
   account_id = module.caller.account_id
   environment = local.environment
   cluster_arn = module.frontend.app_cluster_arn
-  ecs_private_subnet = local.ecs_private_subnet
+  ecs_private_subnet = module.ecs_network.ecs_private_subnet
   virus_check_task_arn = module.backend_virus_check.backend_check_task_arn
   virus_check_container_name = module.backend_virus_check.container_name
   file_format_check_task_arn = module.backend_file_format_check.backend_check_task_arn
@@ -131,7 +129,6 @@ module "api" {
   common_tags = local.common_tags
   environment = local.environment
   vpc_id = local.ecs_vpc
-  private_subnet = local.ecs_private_subnet
   aws_region = local.aws_region
   database_availability_zones = local.availability_zones
   account_id = module.caller.account_id
@@ -140,8 +137,8 @@ module "api" {
   api_parameter_base_path = "${local.parameter_base_path}/api"
   app_image = "nationalarchives/sangria"
   app_port = 8080
-  ecs_public_subnet = local.ecs_public_subnet
-  ecs_private_subnet = local.ecs_private_subnet
+  ecs_public_subnet = module.ecs_network.ecs_public_subnet
+  ecs_private_subnet = module.ecs_network.ecs_private_subnet
   ecs_task_execution_role = "arn:aws:iam::247222723249:role/ecsTaskExecutionRole"
   ecs_vpc = local.ecs_vpc
   fargate_cpu = 1024
