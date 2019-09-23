@@ -63,6 +63,10 @@
             {
                 "valueFrom": "/${app_environment}/TDR_AUTH_PATH",
                 "name": "TDR_AUTH_PATH"
+            },
+            {
+                "valueFrom": "/${app_environment}/GRAPHQL_CLIENT_URI",
+                "name": "GRAPHQL_CLIENT_URI"
             }
         ],        
         "networkMode": "awsvpc",
