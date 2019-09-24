@@ -21,14 +21,16 @@
                 "name": "TDR_GRAPHQL_URI"
             },
             {
-                "value": "${app_environment}",
-                "name": "ENVIRONMENT"
-            },
-            {
                 "valueFrom": "${app_environment}/USER_DB_ENDPOINT",
                 "name": "USER_DB_ENDPOINT"
             }
-        ],        
+        ],
+        "environment" : [
+            {
+                "value": "${app_environment}",
+                "name": "ENVIRONMENT"
+            }
+        ],
         "networkMode": "awsvpc",
         "logConfiguration": {
             "logDriver": "awslogs",
