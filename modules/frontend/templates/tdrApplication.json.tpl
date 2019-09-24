@@ -21,7 +21,7 @@
                 "name": "TDR_GRAPHQL_URI"
             },
             {
-                "valueFrom": "${app_environment}/USER_DB_ENDPOINT",
+                "valueFrom": "/${app_environment}/USER_DB_ENDPOINT",
                 "name": "USER_DB_ENDPOINT"
             }
         ],
