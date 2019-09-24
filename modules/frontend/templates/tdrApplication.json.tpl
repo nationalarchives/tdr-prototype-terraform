@@ -23,6 +23,10 @@
             {
                 "value": "${app_environment}",
                 "name": "ENVIRONMENT"
+            },
+            {
+                "valueFrom": "${app_environment}/USER_DB_ENDPOINT",
+                "name": "USER_DB_ENDPOINT"
             }
         ],        
         "networkMode": "awsvpc",
