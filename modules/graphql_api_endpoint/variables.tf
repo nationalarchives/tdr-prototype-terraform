@@ -39,12 +39,4 @@ variable "authorizer_id" {
   default     = ""
 }
 
-variable "lambda_arn" {
-  description = "The ARN of the Lambda function that backs this API endpoint"
-  type        = string
-}
-
-variable "lambda_name" {
-  description = "The name of the Lambda function that backs this API endpoint"
-  type        = string
-}
+variable "vpc_link_id" {}

@@ -1,3 +1,11 @@
+locals {
+  database_parameter_keys = {
+    url      = "${var.api_parameter_base_path}/db/url"
+    username = "${var.api_parameter_base_path}/db/username"
+    password = "${var.api_parameter_base_path}/db/password"
+  }
+}
+
 resource "aws_ecs_cluster" "database_migrations" {
   name = "tdr-content-db-migrations-${var.environment}"
 

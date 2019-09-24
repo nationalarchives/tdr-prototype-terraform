@@ -1,6 +1,6 @@
-locals {
-    cdn_domain_name = aws_cloudfront_distribution.web_distribution.domain_name
-}
+//locals {
+//    cdn_domain_name = aws_cloudfront_distribution.web_distribution.domain_name
+//}
 
 resource "aws_cognito_user_pool" "pool" {
   name = "${var.app_name}-transfer-records-${var.environment}"
@@ -91,7 +91,7 @@ resource "aws_cognito_user_pool_client" "authenticate" {
   refresh_token_validity               = "30"
   generate_secret                      = true
   explicit_auth_flows                  = ["ADMIN_NO_SRP_AUTH"]
-  callback_urls                        = ["https://${local.cdn_domain_name}/authenticate/cognito"]
+  callback_urls                        = ["https://app.tdr-prototype.co.uk/authenticate/cognito"]
   supported_identity_providers         = ["COGNITO"]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["aws.cognito.signin.user.admin", "email", "openid", "profile"]
@@ -112,7 +112,7 @@ resource "aws_cognito_user_pool_client" "upload" {
   user_pool_id                         = aws_cognito_user_pool.pool.id
   refresh_token_validity               = "30"
   generate_secret                      = false
-  callback_urls                        = ["https://${local.cdn_domain_name}/upload"]
+  callback_urls                        = ["https://app.tdr-prototype.co.uk/upload"]
   supported_identity_providers         = ["COGNITO"]
   allowed_oauth_flows_user_pool_client = true
   allowed_oauth_scopes                 = ["openid", "profile"]

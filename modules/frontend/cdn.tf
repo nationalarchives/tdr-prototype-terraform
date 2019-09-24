@@ -18,7 +18,7 @@ resource "aws_cloudfront_distribution" "web_distribution" {
 
   enabled             = true
   is_ipv6_enabled     = true
-  
+
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
@@ -36,13 +36,13 @@ resource "aws_cloudfront_distribution" "web_distribution" {
     min_ttl                = 0
     default_ttl            = 86400
     max_ttl                = 31536000
-  }  
+  }
 
   price_class = "PriceClass_100"
 
   restrictions {
     geo_restriction {
-      restriction_type = "none"      
+      restriction_type = "none"
     }
   }
 

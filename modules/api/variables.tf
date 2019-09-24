@@ -12,11 +12,6 @@ variable "vpc_id" {
   description = "The VPC for the API and DB"
 }
 
-variable "private_subnet" {
-  description = "The private subnet for the database to run in"
-  type = list(string)
-}
-
 variable "aws_region" {
   type = string
 }
@@ -43,3 +38,23 @@ variable "api_parameter_base_path" {
   type        = string
   description = "Prefix for SSM parameters used by the API"
 }
+
+variable "app_image" {}
+
+variable "app_port" {}
+
+variable "fargate_cpu" {}
+
+variable "fargate_memory" {}
+
+variable "ecs_task_execution_role" {}
+
+variable "ecs_vpc" {}
+
+variable "ecs_public_subnet" {}
+
+variable "ecs_private_subnet" {}
+
+variable "lb_listener" {}
+
+variable "app_name" {}

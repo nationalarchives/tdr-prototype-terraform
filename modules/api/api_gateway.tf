@@ -23,17 +23,12 @@ resource "aws_api_gateway_deployment" "graphql_api" {
     # modules. See: https://github.com/hashicorp/terraform/issues/17101
     dependencies = "${module.graphql_frontend_endpoint.integration_id}, ${module.graphql_file_checker_endpoint.integration_id}"
   }
-
-  lifecycle {
-      create_before_destroy = true
-  }
 }
 
 resource "aws_api_gateway_stage" "graphql_api_deployed_stage" {
   stage_name    = "deployed"
   rest_api_id   = aws_api_gateway_rest_api.graphql_api.id
   deployment_id = aws_api_gateway_deployment.graphql_api.id
-
   tags = var.common_tags
 }
 
@@ -52,11 +47,10 @@ module "graphql_frontend_endpoint" {
   parent_resource_id = aws_api_gateway_rest_api.graphql_api.root_resource_id
   authorization_type = "COGNITO_USER_POOLS"
   authorizer_id      = aws_api_gateway_authorizer.graphql_api_auth.id
-  lambda_arn         = aws_lambda_function.api.arn
-  lambda_name        = aws_lambda_function.api.function_name
   aws_region         = var.aws_region
   environment        = var.environment
   account_id         = var.account_id
+  vpc_link_id        = aws_api_gateway_vpc_link.graphql_vpc_link.id
 }
 
 module "graphql_file_checker_endpoint" {
@@ -66,9 +60,8 @@ module "graphql_file_checker_endpoint" {
   rest_api_id        = aws_api_gateway_rest_api.graphql_api.id
   parent_resource_id = aws_api_gateway_rest_api.graphql_api.root_resource_id
   authorization_type = "AWS_IAM"
-  lambda_arn         = aws_lambda_function.api.arn
-  lambda_name        = aws_lambda_function.api.function_name
   aws_region         = var.aws_region
   environment        = var.environment
   account_id         = var.account_id
+  vpc_link_id        = aws_api_gateway_vpc_link.graphql_vpc_link.id
 }

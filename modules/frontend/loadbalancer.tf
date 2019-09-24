@@ -43,3 +43,18 @@ resource "aws_alb_listener" "front_end" {
     type             = "forward"
   }
 }
+
+# Redirect all traffic from the ALB to the target group
+resource "aws_alb_listener" "front_end_tls" {
+  load_balancer_arn = aws_alb.main.id
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn = "arn:aws:acm:eu-west-2:247222723249:certificate/b82358e0-f0d9-489d-81b3-6300343cf21a"
+
+  default_action {
+    target_group_arn = aws_alb_target_group.app.id
+    type             = "forward"
+  }
+}
+
