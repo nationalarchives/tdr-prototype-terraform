@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "lambda_policy" {
     ]
 
     resources = [
-      "arn:aws:execute-api:eu-west-2:${var.account_id}:${var.api_id}/${var.api_stage}/POST${var.graphql_path}",
+      var.api_arn
     ]
   }
 

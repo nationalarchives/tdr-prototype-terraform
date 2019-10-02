@@ -11,6 +11,7 @@ locals {
   )
   ecs_vpc = module.ecs_network.ecs_vpc
   parameter_base_path = "/tdr/${local.environment}"
+  api_arn = "arn:aws:execute-api:eu-west-2:${module.caller.account_id}:${module.api.graphql_stage_id}/${module.api.graphql_stage_name}/POST${module.api.graphql_path}"
 }
 
 terraform {
@@ -52,8 +53,7 @@ module "backend_virus_check" {
   common_tags = local.common_tags
   graphql_invoke_url = module.api.graphql_api_url
   graphql_path = module.api.graphql_path
-  api_id = module.api.graphql_stage_id
-  api_stage = module.api.graphql_stage_name
+  api_arn = local.api_arn
   account_id = module.caller.account_id
   check_name = "virus"
   image = "nationalarchives/tdr-virus-check"
@@ -69,8 +69,7 @@ module "backend_checksum_check" {
   common_tags = local.common_tags
   graphql_invoke_url = module.api.graphql_api_url
   graphql_path = module.api.graphql_path
-  api_id = module.api.graphql_stage_id
-  api_stage = module.api.graphql_stage_name
+  api_arn = local.api_arn
   account_id = module.caller.account_id
   check_name = "checksum"
   image = "nationalarchives/tdr-checksum-check"
@@ -86,8 +85,7 @@ module "backend_file_format_check" {
   common_tags = local.common_tags
   graphql_invoke_url = module.api.graphql_api_url
   graphql_path = module.api.graphql_path
-  api_id = module.api.graphql_stage_id
-  api_stage = module.api.graphql_stage_name
+  api_arn = local.api_arn
   account_id = module.caller.account_id
   check_name = "fileformat"
   image = "nationalarchives/tdr-file-format-check"
@@ -145,4 +143,16 @@ module "api" {
   fargate_memory = 2048
   lb_listener = module.frontend.load_balancer_listener
   app_name = "sangria-graphql"
+}
+
+module "consignment_export" {
+  source = "./modules/consignment_export"
+  common_tags = local.common_tags
+  environment = local.environment
+  vpc_id = local.ecs_vpc
+  aws_region = local.aws_region
+  api_arn = local.api_arn
+  graphql_invoke_url = module.api.graphql_api_url
+  graphql_path = module.api.graphql_path
+  consignment_file_bucket_arn = module.stepfunction.upload_bucket_arn
 }
