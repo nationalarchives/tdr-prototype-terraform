@@ -1,12 +1,3 @@
-locals {
-  database_environment_keys = {
-    url      = "${var.api_parameter_base_path}/db/url"
-    username = "${var.api_parameter_base_path}/db/username"
-    password = "${var.api_parameter_base_path}/db/password"
-  }
-}
-
-
 resource "aws_ecs_cluster" "tdr_graphql_ecs" {
   name = "tdr-graphql-ecs-${var.environment}"
 
