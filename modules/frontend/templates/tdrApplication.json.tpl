@@ -23,6 +23,10 @@
             {
                 "valueFrom": "/${app_environment}/USER_DB_ENDPOINT",
                 "name": "USER_DB_ENDPOINT"
+            },
+            {
+                "valueFrom": "/${app_environment}/F",
+                "name": "SENDGRID_API_KEY"
             }
         ],
         "environment" : [
