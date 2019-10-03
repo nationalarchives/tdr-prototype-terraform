@@ -1,4 +1,5 @@
 locals {
+  container_name             = "consignment-export-${var.environment}"
   export_task_log_group_name = "/ecs/tdr-consignment-export-${var.environment}"
 }
 
@@ -36,7 +37,7 @@ data "template_file" "consignment_export_container" {
    image_id             = "nationalarchives/tdr-prototype-file-export:${var.environment}"
    app_environment      = var.environment
    aws_region           = var.aws_region
-   container_name       = "consignment-export-${var.environment}"
+   container_name       = local.container_name
    graphql_server_param = var.graphql_invoke_url
    graphql_path_param   = var.graphql_path
    export_bucket_param  = aws_s3_bucket.consignment_export.id
