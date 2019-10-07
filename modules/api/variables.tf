@@ -58,3 +58,19 @@ variable "ecs_private_subnet" {}
 variable "lb_listener" {}
 
 variable "app_name" {}
+
+variable "export_task_id" {
+  description = "ID of ECS task for exporting consignments"
+}
+
+variable "export_container_id" {
+  description = "Container ID of ECS task for exporting consignments"
+}
+
+variable "export_cluster_arn" {
+  description = "Cluster ARN in which consignment export ECS task is run"
+}
+
+variable "export_security_group_id" {
+  description = "Security group used when running consignment export ECS task"
+}

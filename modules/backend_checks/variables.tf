@@ -68,10 +68,10 @@ variable "graphql_path" {
   description = "The graphql path"
 }
 
+variable "api_arn" {
+  description = "The ARN of the GraphQL API"
+}
+
 variable "account_id" {}
-
-variable "api_id" {}
-
-variable "api_stage" {}
 
 variable "check_name" {}

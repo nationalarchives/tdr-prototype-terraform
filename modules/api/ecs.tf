@@ -1,12 +1,3 @@
-locals {
-  database_environment_keys = {
-    url      = "${var.api_parameter_base_path}/db/url"
-    username = "${var.api_parameter_base_path}/db/username"
-    password = "${var.api_parameter_base_path}/db/password"
-  }
-}
-
-
 resource "aws_ecs_cluster" "tdr_graphql_ecs" {
   name = "tdr-graphql-ecs-${var.environment}"
 
@@ -20,13 +11,18 @@ data "template_file" "app" {
   template = file("modules/api/templates/graphql.json.tpl")
 
   vars = {
-    app_image       = "${var.app_image}:${var.environment}"
-    app_port        = 8080
-    app_environment = var.environment
-    aws_region      = var.aws_region
-    url_path        = local.database_parameter_keys.url
-    username_path   = local.database_parameter_keys.username
-    password_path   = local.database_parameter_keys.password
+    app_image                = "${var.app_image}:${var.environment}"
+    app_port                 = 8080
+    app_environment          = var.environment
+    aws_region               = var.aws_region
+    url_path                 = local.database_parameter_keys.url
+    username_path            = local.database_parameter_keys.username
+    password_path            = local.database_parameter_keys.password
+    export_task_id           = var.export_task_id
+    export_container_id      = var.export_container_id
+    export_cluster_arn       = var.export_cluster_arn
+    export_security_group_id = var.export_security_group_id
+    export_subnet_id         = var.ecs_private_subnet[0]
   }
 }
 
