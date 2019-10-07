@@ -74,7 +74,28 @@ data "aws_iam_policy_document" "database_migration_task_assume_role" {
 
 resource "aws_iam_role_policy_attachment" "database_migration_task_execution_policy" {
   role       = aws_iam_role.database_migration_task_excution_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "database_migration_task_execution" {
+  role       = aws_iam_role.database_migration_task_excution_role.name
+  policy_arn = aws_iam_policy.database_migration_task_execution.arn
+}
+
+resource "aws_iam_policy" "database_migration_task_execution" {
+  name   = "database_migration_task_execution_policy_${var.environment}"
+  path   = "/"
+  policy = data.aws_iam_policy_document.database_migration_task_execution.json
+}
+
+data "aws_iam_policy_document" "database_migration_task_execution" {
+  statement {
+    actions   = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [aws_cloudwatch_log_group.database_migration_task.arn]
+  }
 }
 
 resource "aws_cloudwatch_log_group" "database_migration_task" {
