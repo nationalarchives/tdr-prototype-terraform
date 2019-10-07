@@ -61,6 +61,10 @@ variable "export_task_id" {
   description = "ID of ECS task for exporting consignments"
 }
 
+variable "export_task_arn" {
+  description = "ARN of the latest revision of the ECS task for exporting consignments"
+}
+
 variable "export_container_id" {
   description = "Container ID of ECS task for exporting consignments"
 }

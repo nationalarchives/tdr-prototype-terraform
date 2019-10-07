@@ -153,6 +153,30 @@ data "aws_iam_policy_document" "api_ecs_execution" {
   }
 }
 
+resource "aws_iam_role_policy_attachment" "api_ecs_task" {
+  role       = aws_iam_role.api_ecs_task.name
+  policy_arn = aws_iam_policy.api_ecs_task.arn
+}
+
+resource "aws_iam_policy" "api_ecs_task" {
+  name   = "api_ecs_task_policy_${var.environment}"
+  path   = "/"
+  policy = data.aws_iam_policy_document.api_ecs_task.json
+}
+
+data "aws_iam_policy_document" "api_ecs_task" {
+  statement {
+    actions   = ["ecs:RunTask", "iam:PassRole"]
+    // This should specify the ARN of the task to run, but it's not obvious what
+    // the ARN should be because the API doesn't specify a task revision - it
+    // just runs the latest revision, whose ARN we don't know. Specifying the
+    // task ARN and adding ":*" to allow any revision doesn't work. Use a broad
+    // wildcard for now because the direct ECS call will eventually be replaced
+    // by an SNS queue.
+    resources = ["*"]
+  }
+}
+
 resource "aws_api_gateway_vpc_link" "graphql_vpc_link" {
   name        = "graphql-vpc-link-${var.environment}"
   description = "A link between api gateway and the private ecs container"

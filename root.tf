@@ -143,6 +143,7 @@ module "api" {
   lb_listener = module.frontend.load_balancer_listener
   app_name = "sangria-graphql"
   export_task_id = module.consignment_export.task_id
+  export_task_arn = module.consignment_export.task_arn
   export_container_id = module.consignment_export.container_id
   export_cluster_arn = module.consignment_export.cluster_arn
   export_security_group_id = module.consignment_export.security_group_id
