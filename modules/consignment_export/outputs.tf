@@ -2,6 +2,10 @@ output "task_id" {
   value = aws_ecs_task_definition.run_consignment_export.family
 }
 
+output "task_arn" {
+  value = aws_ecs_task_definition.run_consignment_export.arn
+}
+
 output "container_id" {
   value = local.container_name
 }
