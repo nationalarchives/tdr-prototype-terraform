@@ -137,7 +137,6 @@ module "api" {
   app_port = 8080
   ecs_public_subnet = module.ecs_network.ecs_public_subnet
   ecs_private_subnet = module.ecs_network.ecs_private_subnet
-  ecs_task_execution_role = "arn:aws:iam::247222723249:role/ecsTaskExecutionRole"
   ecs_vpc = local.ecs_vpc
   fargate_cpu = 1024
   fargate_memory = 2048

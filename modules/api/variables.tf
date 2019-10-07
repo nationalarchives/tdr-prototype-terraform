@@ -47,8 +47,6 @@ variable "fargate_cpu" {}
 
 variable "fargate_memory" {}
 
-variable "ecs_task_execution_role" {}
-
 variable "ecs_vpc" {}
 
 variable "ecs_public_subnet" {}
