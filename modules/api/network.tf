@@ -23,17 +23,6 @@ resource "aws_security_group" "content_database" {
   )
 }
 
-resource "aws_security_group" "api_lambda" {
-  name        = "api-lambda-security-group-${var.environment}"
-  description = "Allow access to database"
-  vpc_id      = var.vpc_id
-
-  tags = merge(
-    var.common_tags,
-    map("Name", "api-lambda-security-group-${var.environment}")
-  )
-}
-
 resource "aws_security_group" "database_migration_task" {
   name        = "migration-task-security-group-${var.environment}"
   description = "Allow access to database"
@@ -61,17 +50,6 @@ resource "aws_security_group_rule" "allow_ecs_task_to_call_db" {
   protocol                 = "tcp"
   security_group_id        = aws_security_group.content_database.id
   source_security_group_id = aws_security_group.ecs_tasks.id
-}
-
-resource "aws_security_group_rule" "allow_lambda_to_call_ssm" {
-  type             = "egress"
-  from_port        = 443
-  to_port          = 443
-  protocol         = "tcp"
-  # TODO: Can we limit this to just SSM access?
-  cidr_blocks      = ["0.0.0.0/0"]
-  ipv6_cidr_blocks = ["::/0"]
-  security_group_id = aws_security_group.api_lambda.id
 }
 
 resource "aws_security_group_rule" "allow_migrations_to_call_db" {
