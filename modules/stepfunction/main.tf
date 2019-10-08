@@ -2,7 +2,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
   name       = "tdr-step-function-${var.environment}"
   role_arn   = "arn:aws:iam::247222723249:role/service-role/TestS3Role"
   definition = <<EOF
-    {
+     {
   "StartAt":"Run File Checks",
   "States":{
     "Run File Checks":{
@@ -14,19 +14,19 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
           "States":{
             "Run Virus Checks":{
               "Type":"Task",
-              "Resource":"arn:aws:states:::ecs:runTask.waitForTaskToken",
+              "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
-                "Cluster":"${var.cluster_arn}",
-                "TaskDefinition":"${var.virus_check_task_arn}",
+                "Cluster":"arn:aws:ecs:eu-west-2:247222723249:cluster/tdr-prototype-ecs-dev",
+                "TaskDefinition":"arn:aws:ecs:eu-west-2:247222723249:task-definition/tdr-checksum-check-dev:8",
                 "NetworkConfiguration":{
                   "AwsvpcConfiguration":{
                     "Subnets":[
-                      "${var.ecs_private_subnet[0]}",
-                      "${var.ecs_private_subnet[1]}"
+                      "subnet-04b20acae2eeae8ad",
+                      "subnet-02b54a5e5e9d4988a"
                     ],
                     "SecurityGroups":[
-                      "${aws_security_group.ecs_tasks.id}"
+                      "sg-063e96e14996b34f4"
                     ],
                     "AssignPublicIp":"DISABLED"
                   }
@@ -34,36 +34,18 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                 "Overrides":{
                   "ContainerOverrides":[
                     {
-                      "Name":"${var.virus_check_container_name}",
+                      "Name":"checksum-check-container-dev",
                       "Environment":[
                         {
-                          "Name":"TASK_TOKEN_ENV_VARIABLE",
-                          "Value.$":"$$.Task.Token"
-                        },
-                        {
-                          "Name":"FILE_NAME",
-                          "Value.$":"$.detail.requestParameters.key"
+                          "Name":"CONSIGNMENT_ID",
+                          "Value.$":"$.consignmentId"
                         }
                       ]
                     }
                   ]
                 }
               },
-              "Next":"Virus Check Success"
-            },
-            "Virus Check Success":{
-              "End":true,
-              "Type":"Task",
-              "Resource":"arn:aws:states:::sns:publish",
-              "Parameters":{
-                "Message":{
-                  "Input.$":"$",
-                  "InputPath":"$",
-                  "ResultPath":"$",
-                  "OutputPath":"$"
-                },
-                "TopicArn":"${var.virus_check_topic_arn}"
-              }
+              "End": true
             }
           }
         },
@@ -72,19 +54,19 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
           "States":{
             "Run file format checks":{
               "Type":"Task",
-              "Resource":"arn:aws:states:::ecs:runTask.waitForTaskToken",
+              "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
-                "Cluster":"${var.cluster_arn}",
-                "TaskDefinition":"${var.file_format_check_task_arn}",
+                "Cluster":"arn:aws:ecs:eu-west-2:247222723249:cluster/tdr-prototype-ecs-dev",
+                "TaskDefinition":"arn:aws:ecs:eu-west-2:247222723249:task-definition/tdr-checksum-check-dev:7",
                 "NetworkConfiguration":{
                   "AwsvpcConfiguration":{
                     "Subnets":[
-                      "${var.ecs_private_subnet[0]}",
-                      "${var.ecs_private_subnet[1]}"
+                      "subnet-04b20acae2eeae8ad",
+                      "subnet-02b54a5e5e9d4988a"
                     ],
                     "SecurityGroups":[
-                      "${aws_security_group.ecs_tasks.id}"
+                      "sg-063e96e14996b34f4"
                     ],
                     "AssignPublicIp":"DISABLED"
                   }
@@ -92,36 +74,18 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                 "Overrides":{
                   "ContainerOverrides":[
                     {
-                      "Name":"${var.file_format_check_container_name}",
+                      "Name":"checksum-check-container-dev",
                       "Environment":[
                         {
-                          "Name":"TASK_TOKEN_ENV_VARIABLE",
-                          "Value.$":"$$.Task.Token"
-                        },
-                        {
-                          "Name":"FILE_NAME",
-                          "Value.$":"$.detail.requestParameters.key"
+                          "Name":"CONSIGNMENT_ID",
+                          "Value.$":"$.consignmentId"
                         }
                       ]
                     }
                   ]
                 }
               },
-              "Next":"Send file format check to SNS"
-            },
-            "Send file format check to SNS":{
-              "End":true,
-              "Type":"Task",
-              "Resource":"arn:aws:states:::sns:publish",
-              "Parameters":{
-                "Message":{
-                  "Input.$":"$",
-                  "InputPath":"$",
-                  "ResultPath":"$",
-                  "OutputPath":"$"
-                },
-                "TopicArn":"${var.file_format_check_topic_arn}"
-              }
+              "End": true
             }
           }
         },
@@ -130,19 +94,19 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
           "States":{
             "Run checksum checks":{
               "Type":"Task",
-              "Resource":"arn:aws:states:::ecs:runTask.waitForTaskToken",
+              "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
-                "Cluster":"${var.cluster_arn}",
-                "TaskDefinition":"${var.checksum_check_task_arn}",
+                "Cluster":"arn:aws:ecs:eu-west-2:247222723249:cluster/tdr-prototype-ecs-dev",
+                "TaskDefinition":"arn:aws:ecs:eu-west-2:247222723249:task-definition/tdr-checksum-check-dev:9",
                 "NetworkConfiguration":{
                   "AwsvpcConfiguration":{
                     "Subnets":[
-                      "${var.ecs_private_subnet[0]}",
-                      "${var.ecs_private_subnet[1]}"
+                      "subnet-04b20acae2eeae8ad",
+                      "subnet-02b54a5e5e9d4988a"
                     ],
                     "SecurityGroups":[
-                      "${aws_security_group.ecs_tasks.id}"
+                      "sg-063e96e14996b34f4"
                     ],
                     "AssignPublicIp":"DISABLED"
                   }
@@ -150,36 +114,18 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                 "Overrides":{
                   "ContainerOverrides":[
                     {
-                      "Name":"${var.checksum_check_container_name}",
+                      "Name":"checksum-check-container-dev",
                       "Environment":[
                         {
-                          "Name":"TASK_TOKEN_ENV_VARIABLE",
-                          "Value.$":"$$.Task.Token"
-                        },
-                        {
-                          "Name":"FILE_NAME",
-                          "Value.$":"$.detail.requestParameters.key"
+                          "Name":"CONSIGNMENT_ID",
+                          "Value.$":"$.consignmentId"
                         }
                       ]
                     }
                   ]
                 }
               },
-              "Next":"Send checksum check to SNS"
-            },
-            "Send checksum check to SNS":{
-              "End":true,
-              "Type":"Task",
-              "Resource":"arn:aws:states:::sns:publish",
-              "Parameters":{
-                "Message":{
-                  "Input.$":"$",
-                  "InputPath":"$",
-                  "ResultPath":"$",
-                  "OutputPath":"$"
-                },
-                "TopicArn":"${var.checksum_check_topic_arn}"
-              }
+              "End": true
             }
           }
         }
@@ -187,6 +133,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
     }
   }
 }
+
     EOF
 
   tags = merge(
