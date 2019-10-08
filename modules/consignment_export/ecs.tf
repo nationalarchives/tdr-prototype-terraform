@@ -71,6 +71,27 @@ data "aws_iam_policy_document" "consignment_export_execution_assume_role" {
   }
 }
 
+resource "aws_iam_role_policy_attachment" "consignment_export_execution" {
+  role       = aws_iam_role.consignment_export_execution.name
+  policy_arn = aws_iam_policy.consignment_export_execution.arn
+}
+
+resource "aws_iam_policy" "consignment_export_execution" {
+  name   = "consignment_export_execution_policy_${var.environment}"
+  path   = "/"
+  policy = data.aws_iam_policy_document.consignment_export_execution.json
+}
+
+data "aws_iam_policy_document" "consignment_export_execution" {
+  statement {
+    actions   = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+    resources = [aws_cloudwatch_log_group.consignment_export_task.arn]
+  }
+}
+
 resource "aws_iam_role" "consignment_export_task" {
   name = "consignment_export_task_role_${var.environment}"
   assume_role_policy = data.aws_iam_policy_document.consignment_export_task_assume_role.json

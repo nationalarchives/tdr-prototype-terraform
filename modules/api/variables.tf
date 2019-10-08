@@ -47,8 +47,6 @@ variable "fargate_cpu" {}
 
 variable "fargate_memory" {}
 
-variable "ecs_task_execution_role" {}
-
 variable "ecs_vpc" {}
 
 variable "ecs_public_subnet" {}
@@ -61,6 +59,10 @@ variable "app_name" {}
 
 variable "export_task_id" {
   description = "ID of ECS task for exporting consignments"
+}
+
+variable "export_task_arn" {
+  description = "ARN of the latest revision of the ECS task for exporting consignments"
 }
 
 variable "export_container_id" {

@@ -50,11 +50,6 @@ variable "app_name" {
   default     = "tdr-application"
 }
 
-variable "ecs_task_execution_role" {
-  description = "Role arn for the ecsTaskExecutionRole"
-  default     = "arn:aws:iam::247222723249:role/ecsTaskExecutionRole"
-}
-
 variable "health_check_path" {
   default = "/"
 }
