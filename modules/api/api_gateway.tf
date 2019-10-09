@@ -72,8 +72,7 @@ module "graphql_file_checker_endpoint" {
 
 resource "aws_api_gateway_rest_api" "step_functions" {
   name        = "step-functions"
-  description = "This is my API for step function invocation"
-
+  description = "API for step function invocation"
 }
 
 resource "aws_api_gateway_resource" "invoke" {
