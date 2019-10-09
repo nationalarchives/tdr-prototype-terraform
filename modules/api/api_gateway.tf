@@ -85,11 +85,11 @@ resource "aws_api_gateway_method" "StepFunctionMethod" {
   rest_api_id   = "${aws_api_gateway_rest_api.step-functions.id}"
   resource_id   = "${aws_api_gateway_resource.invoke.id}"
   http_method   = "POST"
-  authorization = "NONE"
+  authorization = "AWS_IAM"
 }
 
 
-resource "aws_api_gateway_integration" "MyDemoIntegration" {
+resource "aws_api_gateway_integration" "StepIntegration" {
   rest_api_id             = "${aws_api_gateway_rest_api.step-functions.id}"
   resource_id             = "${aws_api_gateway_resource.invoke.id}"
   http_method             = "${aws_api_gateway_method.StepFunctionMethod.http_method}"
@@ -98,59 +98,25 @@ resource "aws_api_gateway_integration" "MyDemoIntegration" {
   credentials             =  "arn:aws:iam::247222723249:role/APIGatewayToStepFunctions"
   passthrough_behavior    = "WHEN_NO_MATCH"
   uri                     = "arn:aws:apigateway:eu-west-2:states:action/StartExecution"
-  # Transforms the incoming XML request to JSON
-    request_templates       = {
-         "application/json" = <<EOF
-     {
-         "input": "$util.escapeJavaScript($input.json('$'))",
-          "stateMachineArn": aws_sfn_state_machine.sfn_state_machine.id
-      }
-     EOF
+}
+
+resource "aws_api_gateway_method_response" "response_200" {
+  rest_api_id             = "${aws_api_gateway_rest_api.step-functions.id}"
+  resource_id             = "${aws_api_gateway_resource.invoke.id}"
+  http_method             = "${aws_api_gateway_method.StepFunctionMethod.http_method}"
+  status_code             = "200"
+  response_models = {
+    "application/json" = "Empty"
   }
 }
 
+resource "aws_api_gateway_integration_response" "StepResponse" {
+  rest_api_id             = "${aws_api_gateway_rest_api.step-functions.id}"
+  resource_id             = "${aws_api_gateway_resource.invoke.id}"
+  http_method             = "${aws_api_gateway_method.StepFunctionMethod.http_method}"
+  status_code             = "${aws_api_gateway_method_response.response_200.status_code}"
+
+}
 
 
-
-
-
-//resource "aws_api_gateway_rest_api" "step_api" {
-//  name = "tdr-step_api-${var.environment}"
-//  endpoint_configuration {
-//    types = [
-//      "REGIONAL"]
-//  }
-//}
-//
-//resource "aws_api_gateway_resource" "resource" {
-//  path_part   = "resource"
-//  parent_id   = "${aws_api_gateway_rest_api.step_api.root_resource_id}"
-//  rest_api_id = "${aws_api_gateway_rest_api.step_api.id}"
-//}
-//
-//resource "aws_api_gateway_method" "method" {
-//  rest_api_id   = "${aws_api_gateway_rest_api.step_api.id}"
-//  resource_id   = "${aws_api_gateway_resource.resource.id}"
-//  http_method   = "POST"
-//  authorization = "AWS_IAM"
-//}
-//
-//
-//resource "aws_api_gateway_integration"   "endpoint_integration" {
-//  rest_api_id             = "${aws_api_gateway_rest_api.step_api.id}"
-//  resource_id             = "${aws_api_gateway_resource.resource.id}"
-//  http_method             = "${aws_api_gateway_method.method.http_method}"
-//  integration_http_method = "POST"
-//  type                    = "AWS"
-//  passthrough_behavior    = "NEVER"
-//  uri                     = "arn:aws:apigateway:${var.aws_region}:states:action/StartExecution"
-//  request_templates       = {
-//       "application/json" = <<EOF
-//   {
-//       "input": "$util.escapeJavaScript($input.json('$'))",
-//        "stateMachineArn": aws_sfn_state_machine.sfn_state_machine.id
-//    }
-//   EOF
-//  }
-//}
 
