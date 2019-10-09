@@ -69,20 +69,21 @@ module "graphql_file_checker_endpoint" {
 }
 
 
-resource "aws_api_gateway_rest_api" "step-functions" {
+
+resource "aws_api_gateway_rest_api" "step_functions" {
   name        = "step-functions"
   description = "This is my API for step function invocation"
 
 }
 
 resource "aws_api_gateway_resource" "invoke" {
-  rest_api_id = "${aws_api_gateway_rest_api.step-functions.id}"
-  parent_id   = "${aws_api_gateway_rest_api.step-functions.root_resource_id}"
+  rest_api_id = "${aws_api_gateway_rest_api.step_functions.id}"
+  parent_id   = "${aws_api_gateway_rest_api.step_functions.root_resource_id}"
   path_part   = "invoke"
  }
 
 resource "aws_api_gateway_method" "StepFunctionMethod" {
-  rest_api_id   = "${aws_api_gateway_rest_api.step-functions.id}"
+  rest_api_id   = "${aws_api_gateway_rest_api.step_functions.id}"
   resource_id   = "${aws_api_gateway_resource.invoke.id}"
   http_method   = "POST"
   authorization = "AWS_IAM"
@@ -90,7 +91,7 @@ resource "aws_api_gateway_method" "StepFunctionMethod" {
 
 
 resource "aws_api_gateway_integration" "StepIntegration" {
-  rest_api_id             = "${aws_api_gateway_rest_api.step-functions.id}"
+  rest_api_id             = "${aws_api_gateway_rest_api.step_functions.id}"
   resource_id             = "${aws_api_gateway_resource.invoke.id}"
   http_method             = "${aws_api_gateway_method.StepFunctionMethod.http_method}"
   integration_http_method = "POST"
@@ -101,7 +102,7 @@ resource "aws_api_gateway_integration" "StepIntegration" {
 }
 
 resource "aws_api_gateway_method_response" "response_200" {
-  rest_api_id             = "${aws_api_gateway_rest_api.step-functions.id}"
+  rest_api_id             = "${aws_api_gateway_rest_api.step_functions.id}"
   resource_id             = "${aws_api_gateway_resource.invoke.id}"
   http_method             = "${aws_api_gateway_method.StepFunctionMethod.http_method}"
   status_code             = "200"
@@ -111,11 +112,24 @@ resource "aws_api_gateway_method_response" "response_200" {
 }
 
 resource "aws_api_gateway_integration_response" "StepResponse" {
-  rest_api_id             = "${aws_api_gateway_rest_api.step-functions.id}"
-  resource_id             = "${aws_api_gateway_resource.invoke.id}"
-  http_method             = "${aws_api_gateway_method.StepFunctionMethod.http_method}"
-  status_code             = "${aws_api_gateway_method_response.response_200.status_code}"
+  rest_api_id    = "${aws_api_gateway_rest_api.step_functions.id}"
+  resource_id    = "${aws_api_gateway_resource.invoke.id}"
+  http_method    = "${aws_api_gateway_method.StepFunctionMethod.http_method}"
+  status_code    = "${aws_api_gateway_method_response.response_200.status_code}"
 
+}
+
+
+resource "aws_api_gateway_deployment" "step_api" {
+  depends_on     = ["aws_api_gateway_integration.StepIntegration"]
+  rest_api_id    = "${aws_api_gateway_rest_api.step_functions.id}"
+}
+
+resource "aws_api_gateway_stage" "step_api_deployed_stage" {
+  stage_name     = "deployed-step"
+  rest_api_id    = "${aws_api_gateway_rest_api.step_functions.id}"
+  deployment_id  = "${aws_api_gateway_deployment.step_api.id}"
+  tags           = var.common_tags
 }
 
 
