@@ -2,7 +2,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
   name       = "tdr-step-function-${var.environment}"
   role_arn   = "arn:aws:iam::247222723249:role/service-role/TestS3Role"
   definition = <<EOF
-    {
+     {
   "StartAt":"Run File Checks",
   "States":{
     "Run File Checks":{
@@ -14,7 +14,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
           "States":{
             "Run Virus Checks":{
               "Type":"Task",
-              "Resource":"arn:aws:states:::ecs:runTask.waitForTaskToken",
+              "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
                 "Cluster":"${var.cluster_arn}",
@@ -37,33 +37,15 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                       "Name":"${var.virus_check_container_name}",
                       "Environment":[
                         {
-                          "Name":"TASK_TOKEN_ENV_VARIABLE",
-                          "Value.$":"$$.Task.Token"
-                        },
-                        {
-                          "Name":"FILE_NAME",
-                          "Value.$":"$.detail.requestParameters.key"
+                          "Name":"CONSIGNMENT_ID",
+                          "Value.$":"$.consignmentId"
                         }
                       ]
                     }
                   ]
                 }
               },
-              "Next":"Virus Check Success"
-            },
-            "Virus Check Success":{
-              "End":true,
-              "Type":"Task",
-              "Resource":"arn:aws:states:::sns:publish",
-              "Parameters":{
-                "Message":{
-                  "Input.$":"$",
-                  "InputPath":"$",
-                  "ResultPath":"$",
-                  "OutputPath":"$"
-                },
-                "TopicArn":"${var.virus_check_topic_arn}"
-              }
+              "End": true
             }
           }
         },
@@ -72,7 +54,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
           "States":{
             "Run file format checks":{
               "Type":"Task",
-              "Resource":"arn:aws:states:::ecs:runTask.waitForTaskToken",
+              "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
                 "Cluster":"${var.cluster_arn}",
@@ -95,33 +77,15 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                       "Name":"${var.file_format_check_container_name}",
                       "Environment":[
                         {
-                          "Name":"TASK_TOKEN_ENV_VARIABLE",
-                          "Value.$":"$$.Task.Token"
-                        },
-                        {
-                          "Name":"FILE_NAME",
-                          "Value.$":"$.detail.requestParameters.key"
+                          "Name":"CONSIGNMENT_ID",
+                          "Value.$":"$.consignmentId"
                         }
                       ]
                     }
                   ]
                 }
               },
-              "Next":"Send file format check to SNS"
-            },
-            "Send file format check to SNS":{
-              "End":true,
-              "Type":"Task",
-              "Resource":"arn:aws:states:::sns:publish",
-              "Parameters":{
-                "Message":{
-                  "Input.$":"$",
-                  "InputPath":"$",
-                  "ResultPath":"$",
-                  "OutputPath":"$"
-                },
-                "TopicArn":"${var.file_format_check_topic_arn}"
-              }
+              "End": true
             }
           }
         },
@@ -130,7 +94,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
           "States":{
             "Run checksum checks":{
               "Type":"Task",
-              "Resource":"arn:aws:states:::ecs:runTask.waitForTaskToken",
+              "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
                 "Cluster":"${var.cluster_arn}",
@@ -153,33 +117,15 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                       "Name":"${var.checksum_check_container_name}",
                       "Environment":[
                         {
-                          "Name":"TASK_TOKEN_ENV_VARIABLE",
-                          "Value.$":"$$.Task.Token"
-                        },
-                        {
-                          "Name":"FILE_NAME",
-                          "Value.$":"$.detail.requestParameters.key"
+                          "Name":"CONSIGNMENT_ID",
+                          "Value.$":"$.consignmentId"
                         }
                       ]
                     }
                   ]
                 }
               },
-              "Next":"Send checksum check to SNS"
-            },
-            "Send checksum check to SNS":{
-              "End":true,
-              "Type":"Task",
-              "Resource":"arn:aws:states:::sns:publish",
-              "Parameters":{
-                "Message":{
-                  "Input.$":"$",
-                  "InputPath":"$",
-                  "ResultPath":"$",
-                  "OutputPath":"$"
-                },
-                "TopicArn":"${var.checksum_check_topic_arn}"
-              }
+              "End": true
             }
           }
         }
@@ -187,6 +133,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
     }
   }
 }
+
     EOF
 
   tags = merge(

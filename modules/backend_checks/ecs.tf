@@ -11,7 +11,7 @@
 }
 
 resource "aws_ecs_task_definition" "checksum_check" {
-  family                   = "${var.task_name}-${var.environment}"
+  family                   = "${var.container_name}-${var.environment}"
   execution_role_arn       = var.ecs_task_execution_role
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
@@ -22,6 +22,6 @@ resource "aws_ecs_task_definition" "checksum_check" {
 
   tags = merge(
     var.common_tags,
-    map("Name", "${var.task_name}-task-definition")
+    map("Name", "${var.container_name}-task-definition")
   )
 }

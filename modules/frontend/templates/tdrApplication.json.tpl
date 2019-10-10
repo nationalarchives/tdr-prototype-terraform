@@ -23,6 +23,10 @@
             {
                 "valueFrom": "/${app_environment}/USER_DB_ENDPOINT",
                 "name": "USER_DB_ENDPOINT"
+            },
+            {
+                "valueFrom": "/${app_environment}/TDR_STEP_FUNCTION_URI",
+                "name": "TDR_STEP_FUNCTION_URI"
             }
         ],
         "environment" : [
