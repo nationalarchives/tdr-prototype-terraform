@@ -171,8 +171,8 @@ data "aws_iam_policy_document" "api_ecs_task" {
     // the ARN should be because the API doesn't specify a task revision - it
     // just runs the latest revision, whose ARN we don't know. Specifying the
     // task ARN and adding ":*" to allow any revision doesn't work. Use a broad
-    // wildcard for now because the direct ECS will call will eventually be
-    // replaced by an SNS queue.
+    // wildcard for now because the direct ECS call will eventually be replaced
+    // by an SNS queue.
     resources = ["*"]
   }
 }
