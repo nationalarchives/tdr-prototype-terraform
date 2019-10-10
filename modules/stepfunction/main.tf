@@ -17,16 +17,16 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
               "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
-                "Cluster":"arn:aws:ecs:eu-west-2:247222723249:cluster/tdr-prototype-ecs-dev",
-                "TaskDefinition":"arn:aws:ecs:eu-west-2:247222723249:task-definition/tdr-checksum-check-dev:8",
+                "Cluster":"${var.cluster_arn}",
+                "TaskDefinition":"${var.virus_check_task_arn}",
                 "NetworkConfiguration":{
                   "AwsvpcConfiguration":{
                     "Subnets":[
-                      "subnet-04b20acae2eeae8ad",
-                      "subnet-02b54a5e5e9d4988a"
+                      "${var.ecs_private_subnet[0]}",
+                      "${var.ecs_private_subnet[1]}"
                     ],
                     "SecurityGroups":[
-                      "sg-063e96e14996b34f4"
+                      "${aws_security_group.ecs_tasks.id}"
                     ],
                     "AssignPublicIp":"DISABLED"
                   }
@@ -34,7 +34,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                 "Overrides":{
                   "ContainerOverrides":[
                     {
-                      "Name":"checksum-check-container-dev",
+                      "Name":"${var.virus_check_container_name}",
                       "Environment":[
                         {
                           "Name":"CONSIGNMENT_ID",
@@ -57,16 +57,16 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
               "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
-                "Cluster":"arn:aws:ecs:eu-west-2:247222723249:cluster/tdr-prototype-ecs-dev",
-                "TaskDefinition":"arn:aws:ecs:eu-west-2:247222723249:task-definition/tdr-checksum-check-dev:7",
+                "Cluster":"${var.cluster_arn}",
+                "TaskDefinition":"${var.file_format_check_task_arn}",
                 "NetworkConfiguration":{
                   "AwsvpcConfiguration":{
                     "Subnets":[
-                      "subnet-04b20acae2eeae8ad",
-                      "subnet-02b54a5e5e9d4988a"
+                      "${var.ecs_private_subnet[0]}",
+                      "${var.ecs_private_subnet[1]}"
                     ],
                     "SecurityGroups":[
-                      "sg-063e96e14996b34f4"
+                      "${aws_security_group.ecs_tasks.id}"
                     ],
                     "AssignPublicIp":"DISABLED"
                   }
@@ -74,7 +74,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                 "Overrides":{
                   "ContainerOverrides":[
                     {
-                      "Name":"checksum-check-container-dev",
+                      "Name":"${var.file_format_check_container_name}",
                       "Environment":[
                         {
                           "Name":"CONSIGNMENT_ID",
@@ -97,16 +97,16 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
               "Resource": "arn:aws:states:::ecs:runTask.sync",
               "Parameters":{
                 "LaunchType":"FARGATE",
-                "Cluster":"arn:aws:ecs:eu-west-2:247222723249:cluster/tdr-prototype-ecs-dev",
-                "TaskDefinition":"arn:aws:ecs:eu-west-2:247222723249:task-definition/tdr-checksum-check-dev:9",
+                "Cluster":"${var.cluster_arn}",
+                "TaskDefinition":"${var.checksum_check_task_arn}",
                 "NetworkConfiguration":{
                   "AwsvpcConfiguration":{
                     "Subnets":[
-                      "subnet-04b20acae2eeae8ad",
-                      "subnet-02b54a5e5e9d4988a"
+                      "${var.ecs_private_subnet[0]}",
+                      "${var.ecs_private_subnet[1]}"
                     ],
                     "SecurityGroups":[
-                      "sg-063e96e14996b34f4"
+                      "${aws_security_group.ecs_tasks.id}"
                     ],
                     "AssignPublicIp":"DISABLED"
                   }
@@ -114,7 +114,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                 "Overrides":{
                   "ContainerOverrides":[
                     {
-                      "Name":"checksum-check-container-dev",
+                      "Name":"${var.checksum_check_container_name}",
                       "Environment":[
                         {
                           "Name":"CONSIGNMENT_ID",

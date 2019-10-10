@@ -57,6 +57,7 @@ module "backend_virus_check" {
   account_id = module.caller.account_id
   check_name = "virus"
   image = "nationalarchives/tdr-virus-check"
+  container_name = "tdr-virus-check"
 
 }
 
@@ -73,6 +74,7 @@ module "backend_checksum_check" {
   account_id = module.caller.account_id
   check_name = "checksum"
   image = "nationalarchives/tdr-checksum-check"
+  container_name = "tdr-checksum-check"
 
 }
 
@@ -89,6 +91,7 @@ module "backend_file_format_check" {
   account_id = module.caller.account_id
   check_name = "fileformat"
   image = "nationalarchives/tdr-file-format-check"
+  container_name = "tdr-file-format-check"
 
 }
 

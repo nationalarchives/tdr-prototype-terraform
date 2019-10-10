@@ -44,11 +44,6 @@ variable "image" {
   description = "The docker image to run file format checks against the files"
 }
 
-variable "task_name" {
-  description = "The name of the file format check task"
-  default = "tdr-checksum-check"
-}
-
 variable "app_name" {
   description = "Name of the hosted application"
   type        = string
@@ -57,7 +52,6 @@ variable "app_name" {
 
 variable "container_name" {
   description = "The name of the container for the ecs task"
-  default = "checksum-check-container"
 }
 
 variable "graphql_invoke_url" {
