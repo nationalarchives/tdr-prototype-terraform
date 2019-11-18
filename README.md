@@ -58,15 +58,15 @@ HCL Language Support: https://plugins.jetbrains.com/plugin/7808-hashicorp-terraf
    ```
 9. In the command terminal navigate to the root of the project
 10. Once in the correct directory in the command terminal run the following command:
-   ```
+   `
     $ terraform init
-    ```
+    `
 
-   * This will initiate terraform locally.
+    This will initiate terraform locally.
 
 11. When Terraform has initiated run the following command: `$ terraform apply`
 
-   * This will generate what Terraform will create and provide and outline of this in the command terminal
+    This will generate what Terraform will create and provide and outline of this in the command terminal
 
 12. To create the AWS resources type “yes” when prompted in the command terminal
 13. Terraform will create the AWS resources.
@@ -86,6 +86,14 @@ HCL Language Support: https://plugins.jetbrains.com/plugin/7808-hashicorp-terraf
     **NOTE**: this may take a few minutes to complete.
 
 **NOTE: PLEASE DO NOT DELETE THE RESOURCES UNLESS ABSOLUTELY SURE AS THESE RESOURCES ARE BEING USED FOR DEVELOPMENT**
+
+## Terraform `destroy` Command
+
+When destroying a Terraform environment there are a some issues:
+* S3 buckets will not be deleted unless they are already empty
+* The DB creates a snapshot of the database when it is destroyed but uses the same name, so on a subsequent destroy this fails because the snapshot name is already used.
+
+The destroy will not complete unless these issues are resolved manually. All other resources will be destroyed successfully.
 
 ## Further Information
 
