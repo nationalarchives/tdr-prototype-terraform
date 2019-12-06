@@ -27,6 +27,10 @@
             {
                 "valueFrom": "/${app_environment}/TDR_STEP_FUNCTION_URI",
                 "name": "TDR_STEP_FUNCTION_URI"
+            },
+            {
+                "valueFrom": "/${app_environment}/TDR_STATE_MACHINE_ARN",
+                "name": "TDR_STATE_MACHINE_ARN"
             }
         ],
         "environment" : [

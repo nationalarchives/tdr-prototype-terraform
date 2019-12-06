@@ -43,6 +43,15 @@ resource "aws_security_group_rule" "allow_db_requests_from_migration_task" {
   source_security_group_id = aws_security_group.database_migration_task.id
 }
 
+resource "aws_security_group_rule" "allow_db_requests_from_ecs_task" {
+  type                     = "ingress"
+  from_port                = local.db_port
+  to_port                  = local.db_port
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.content_database.id
+  source_security_group_id = aws_security_group.ecs_tasks.id
+}
+
 resource "aws_security_group_rule" "allow_ecs_task_to_call_db" {
   type                     = "egress"
   from_port                = local.db_port
